@@ -1,0 +1,59 @@
+{
+  "name": "spreado",
+  "version": "0.1.0",
+  "description": "",
+  "author": "licg <licg9999@126.com>",
+  "license": "MIT",
+  "repository": "react-easier/spreado",
+  "homepage": "https://github.com/react-easier/spreado#readme",
+  "main": "lib/index.js",
+  "engines": {
+    "node": ">=12",
+    "yarn": "^1"
+  },
+  "scripts": {
+    "build": "tsc --project configs/tsconfig.prod.json",
+    "watch": "yarn build --watch",
+    "test": "jest",
+    "coverage": "yarn test --coverage",
+    "clean": "yarn clean:built \n yarn clean:installed",
+    "clean:built": "rimraf lib",
+    "clean:installed": "rimraf yarn.lock node_modules",
+    "lint": "concurrently \"yarn:lint:*\"",
+    "lint:tsc": "tsc --noEmit",
+    "lint:eslint": "eslint \"src/**/*.@([jt]s?(x)|json)\"",
+    "lint:prettier": "prettier --check \"src/**/*.@([jt]s?(x)|json)\"",
+    "lint:commitlint": "commitlint --to HEAD",
+    "prepare": "yarn build"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/react-hooks": "^7.0.2",
+    "@types/jest": "^27.4.1",
+    "@types/react": "^16.9.56",
+    "@types/react-dom": "^16.9.8",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "concurrently": "^7.1.0",
+    "eslint": "^8.13.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^26.1.4",
+    "eslint-plugin-json": "^3.1.0",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.4.0",
+    "jest": "^27.5.1",
+    "prettier": "^2.6.2",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.1.4",
+    "typescript": "^4.6.3"
+  }
+}

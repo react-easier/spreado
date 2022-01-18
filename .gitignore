@@ -1,0 +1,23 @@
+# Deps
+node_modules/
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+
+# Logs
+*.log
+
+# Outputs
+lib/
+es/
+dist/
+out/
+build/
+*.tgz
+
+# Cov results
+coverage/
+.nyc_output/
+
+# Misc
+.DS_Store
