@@ -1,3 +1,3 @@
 export * from './SpreadoSetupProvider';
-export * from './useSpread';
+export * from './useSpreadInOut';
 export * from './useSpreadoSetup';
