@@ -10,6 +10,7 @@ jobs:
     uses: ./.github/workflows/test.yml
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
   release:
     name: Release
     needs: test
