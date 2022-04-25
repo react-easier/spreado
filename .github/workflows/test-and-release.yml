@@ -1,0 +1,30 @@
+name: Test and Release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test
+    uses: ./.github/workflows/test.yml
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  release:
+    name: Release
+    needs: test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install and build
+        run: yarn
+      - name: Perform semantic release
+        run: npx semantic-release@18
+        env:
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

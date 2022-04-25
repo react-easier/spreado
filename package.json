@@ -6,11 +6,14 @@
   "license": "MIT",
   "repository": "react-easier/spreado",
   "homepage": "https://github.com/react-easier/spreado#readme",
-  "main": "lib/index.js",
   "engines": {
     "node": ">=12",
     "yarn": "^1"
   },
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "tsc --project configs/tsconfig.prod.json",
     "watch": "yarn build --watch",
