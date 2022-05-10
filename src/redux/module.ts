@@ -78,10 +78,10 @@ export interface SpreadoReduxPreloadedState {
 }
 
 export function createSpreadoReduxPreloadedState(
-  kvMap: Record<string | number | symbol, unknown>
+  ivMap: Record<string | number | symbol, unknown>
 ): SpreadoReduxPreloadedState {
-  const preloadedState: SpreadoReduxState = Object.keys(kvMap).reduce(
-    (acc, key) => ({...acc, [generateSpreadKey(key)]: kvMap[key]}),
+  const preloadedState: SpreadoReduxState = Object.keys(ivMap).reduce(
+    (acc, index) => ({...acc, [generateSpreadKey(index)]: ivMap[index]}),
     {}
   );
   return {[SPREADO_REDUX_STATE_INDEX]: preloadedState};

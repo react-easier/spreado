@@ -61,7 +61,7 @@ describe('reducer', () => {
   describe(`handles ${SPREADO_REDUX_ACTION_RESET_STATE}`, () => {
     const type = SPREADO_REDUX_ACTION_RESET_STATE;
 
-    test('delete value by key', () => {
+    test('deletes value by key', () => {
       const key = uniqueId();
       const initState = {[key]: {}};
       expect(reducer(initState, {type, key})[key]).not.toBeDefined();
