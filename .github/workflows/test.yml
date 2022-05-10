@@ -6,7 +6,9 @@ on:
       CODECOV_TOKEN:
         required: true
   pull_request:
-    branches: [main]
+    branches:
+      - main
+      - release
 
 jobs:
   main:
