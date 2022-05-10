@@ -15,21 +15,21 @@ export class SpreadoSetupBetweenReduxSwr extends SpreadoSetupBase {
     this.options = options;
   }
 
-  setSpreadOut<T>(index: unknown, value: T | ((value?: T) => T)): T {
-    return setSpreadOut(this.options.store, index, value);
-  }
-
   useSpreadOut<T>(index: unknown, value: T): T {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return useSpreadOut(this.useSpreadOutCounter, index, value);
   }
 
-  getSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined {
-    return getSpreadIn(this.options.store, index, fallback);
-  }
-
   useSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return useSpreadIn(index, fallback);
+  }
+
+  setSpreadOut<T>(index: unknown, value: T | ((value?: T) => T)): T {
+    return setSpreadOut(this.options.store, index, value);
+  }
+
+  getSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined {
+    return getSpreadIn(this.options.store, index, fallback);
   }
 }

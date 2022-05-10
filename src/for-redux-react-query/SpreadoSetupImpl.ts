@@ -24,11 +24,11 @@ export class SpreadoSetupForReduxReactQuery extends SpreadoSetupBase {
     super(options);
     this.options = options;
     if (this.options.enableAutoSpread) {
-      this.enableAutoSpreadOutQueries();
+      this.enableQueriesAutoSpreadOut();
     }
   }
 
-  enableAutoSpreadOutQueries() {
+  enableQueriesAutoSpreadOut() {
     const {store, queryClient} = this.options;
     const queryCache = queryClient.getQueryCache();
     queryCache.subscribe(() => {
@@ -44,12 +44,12 @@ export class SpreadoSetupForReduxReactQuery extends SpreadoSetupBase {
   }
 
   useSpreadOut<T>(index: unknown, value: T): T {
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     return useSpreadOut(this.useSpreadOutCounter, index, value);
   }
 
   useSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined {
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     return useSpreadIn(index, fallback);
   }
 
