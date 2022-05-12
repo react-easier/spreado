@@ -1,23 +1,20 @@
 import {renderHook} from '@testing-library/react-hooks';
 import {uniqueId} from 'lodash';
 import {Store} from 'redux';
-
 import {getSpreadIn, setSpreadOut, useSpreadIn, useSpreadOut} from '../redux';
-import {SpreadoSetupBetweenReduxSwr} from './SpreadoSetupImpl';
+import {SpreadoSetupForReduxSwr} from './SpreadoSetupImpl';
 
-const store: Store = {
-  dispatch: jest.fn(),
-} as never;
+const store: Store = {} as never;
 jest.mock('../redux');
 
-describe('SpreadoSetupBetweenReduxSwr', () => {
+describe('SpreadoSetupForReduxSwr', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('setSpreadOut', () => {
+  describe('#setSpreadOut', () => {
     test('works', () => {
-      const setup = new SpreadoSetupBetweenReduxSwr({store});
+      const setup = new SpreadoSetupForReduxSwr({store});
       const index = uniqueId();
       const value = uniqueId();
       renderHook(() => setup.setSpreadOut(index, value));
@@ -25,9 +22,9 @@ describe('SpreadoSetupBetweenReduxSwr', () => {
     });
   });
 
-  describe('useSpreadOut', () => {
+  describe('#useSpreadOut', () => {
     test('works', () => {
-      const setup = new SpreadoSetupBetweenReduxSwr({store});
+      const setup = new SpreadoSetupForReduxSwr({store});
       const index = uniqueId();
       const value = uniqueId();
       renderHook(() => setup.useSpreadOut(index, value));
@@ -35,9 +32,9 @@ describe('SpreadoSetupBetweenReduxSwr', () => {
     });
   });
 
-  describe('getSpreadIn', () => {
+  describe('#getSpreadIn', () => {
     test('works', () => {
-      const setup = new SpreadoSetupBetweenReduxSwr({store});
+      const setup = new SpreadoSetupForReduxSwr({store});
       const index = uniqueId();
       const value = uniqueId();
       renderHook(() => setup.getSpreadIn(index, value));
@@ -45,9 +42,9 @@ describe('SpreadoSetupBetweenReduxSwr', () => {
     });
   });
 
-  describe('useSpreadIn', () => {
+  describe('#useSpreadIn', () => {
     test('works', () => {
-      const setup = new SpreadoSetupBetweenReduxSwr({store});
+      const setup = new SpreadoSetupForReduxSwr({store});
       const index = uniqueId();
       const value = uniqueId();
       renderHook(() => setup.useSpreadIn(index, value));
