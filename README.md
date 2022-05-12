@@ -1,5 +1,10 @@
 # Spreado
 
+[![](https://img.shields.io/codecov/c/github/react-easier/spreado/main)](https://app.codecov.io/gh/react-easier/spreado)
+[![](https://img.shields.io/npm/dm/spreado)](https://www.npmjs.com/package/spreado)
+[![](https://img.shields.io/github/license/react-easier/spreado)](https://github.com/react-easier/spreado/blob/main/LICENSE)
+[![](https://img.shields.io/badge/semantic--release-conventional-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
+
 > Easier to spread things across components in a React app
 
 ## Why
@@ -110,9 +115,9 @@ Spreado assumes a pair of a state managing lib and a data fetching lib has been 
 #### With Redux and React Query
 
 ```tsx
-import {QueryClient, QueryClientProvider} from 'react-query';
-import {Provider as ReduxProvider} from 'react-redux';
 import {createStore, combineReducers} from 'redux';
+import {Provider as ReduxProvider} from 'react-redux';
+import {QueryClient, QueryClientProvider} from 'react-query';
 import {SpreadoSetupForReduxReactQuery, SpreadoSetupProvider, spreadoReducerPack} from 'spreado';
 
 const store = createStore(combineReducers(spreadoReducerPack));
@@ -150,6 +155,76 @@ const App: FC = () => {
       </SpreadoSetupProvider>
     </QueryClientProvider>
   </ReduxProvider>;
+};
+```
+
+#### With Redux and SWR
+
+```tsx
+import {createStore, combineReducers} from 'redux';
+import {Provider as ReduxProvider} from 'react-redux';
+import {SpreadoSetupForReduxSwr, SpreadoSetupProvider, spreadoReducerPack} from 'spreado';
+
+const store = createStore(combineReducers(spreadoReducerPack));
+const spreadoSetup = new SpreadoSetupForReduxSwr({store});
+
+const App: FC = () => {
+  <ReduxProvider store={store}>
+    <SpreadoSetupProvider setup={spreadoSetup}>
+      <div>...</div>
+    </SpreadoSetupProvider>
+  </ReduxProvider>;
+};
+```
+
+#### With Redux Toolkit and SWR
+
+```tsx
+import {configureStore} from '@reduxjs/toolkit';
+import {Provider as ReduxProvider} from 'react-redux';
+import {SpreadoSetupForReduxSwr, SpreadoSetupProvider, spreadoReducerPack} from 'spreado';
+
+const store = configureStore({reducer: spreadoReducerPack});
+const spreadoSetup = new SpreadoSetupForReduxSwr({store});
+
+const App: FC = () => {
+  <ReduxProvider store={store}>
+    <SpreadoSetupProvider setup={spreadoSetup}>
+      <div>...</div>
+    </SpreadoSetupProvider>
+  </ReduxProvider>;
+};
+```
+
+#### With MobX and React Query
+
+```tsx
+import {QueryClient, QueryClientProvider} from 'react-query';
+import {SpreadoSetupForMobXReactQuery, SpreadoSetupProvider} from 'spreado';
+
+const queryClient = new QueryClient();
+const spreadoSetup = new SpreadoSetupForMobXReactQuery({queryClient});
+
+const App: FC = () => {
+  <QueryClientProvider client={queryClient}>
+    <SpreadoSetupProvider setup={spreadoSetup}>
+      <div>...</div>
+    </SpreadoSetupProvider>
+  </QueryClientProvider>;
+};
+```
+
+#### With MobX and SWR
+
+```tsx
+import {SpreadoSetupForMobXSwr, SpreadoSetupProvider} from 'spreado';
+
+const spreadoSetup = new SpreadoSetupForMobXSwr();
+
+const App: FC = () => {
+  <SpreadoSetupProvider setup={spreadoSetup}>
+    <div>...</div>
+  </SpreadoSetupProvider>;
 };
 ```
 

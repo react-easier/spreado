@@ -1,7 +1,17 @@
 {
   "name": "spreado",
-  "version": "0.1.0",
-  "description": "",
+  "version": "1.0.0-semantic-release",
+  "description": "Easier to spread things across components in a React app",
+  "keywords": [
+    "react",
+    "redux",
+    "redux-toolkit",
+    "mobx",
+    "react-query",
+    "swr",
+    "spreado",
+    "react-easier"
+  ],
   "author": "licg <licg9999@126.com>",
   "license": "MIT",
   "repository": "react-easier/spreado",
