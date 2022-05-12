@@ -36,7 +36,7 @@ describe('SpreadoSetupForReduxReactQuery', () => {
     mocked(queryClient.getQueryState).mockReturnValue(null as never);
   });
 
-  describe('useSpreadOut', () => {
+  describe('#useSpreadOut', () => {
     test('works', () => {
       const setup = new SpreadoSetupForReduxReactQuery({store, queryClient});
       const index = uniqueId();
@@ -46,7 +46,7 @@ describe('SpreadoSetupForReduxReactQuery', () => {
     });
   });
 
-  describe('useSpreadIn', () => {
+  describe('#useSpreadIn', () => {
     test('works', () => {
       const setup = new SpreadoSetupForReduxReactQuery({store, queryClient});
       const index = uniqueId();
@@ -56,7 +56,7 @@ describe('SpreadoSetupForReduxReactQuery', () => {
     });
   });
 
-  describe('setSpreadOut', () => {
+  describe('#setSpreadOut', () => {
     test('works', () => {
       const setup = new SpreadoSetupForReduxReactQuery({store, queryClient});
       const index = uniqueId();
@@ -66,7 +66,7 @@ describe('SpreadoSetupForReduxReactQuery', () => {
     });
   });
 
-  describe('getSpreadIn', () => {
+  describe('#getSpreadIn', () => {
     test('works', () => {
       const setup = new SpreadoSetupForReduxReactQuery({store, queryClient});
       const index = uniqueId();
