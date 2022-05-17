@@ -110,11 +110,14 @@ The snake-case named functions are placeholders. The result of data fetching get
 
 ### Initialization
 
-Spreado assumes a pair of a state managing lib and a data fetching lib has been adopted by your modern React app. It aims to integrate with them well but won't re-invent wheels itself. Most well-known libs of the categories (e.g. [Redux](https://github.com/reduxjs/redux), [MobX](https://github.com/mobxjs/mobx), [React Query](https://github.com/tannerlinsley/react-query), [SWR](https://github.com/vercel/swr)) have been supported by Spreado. You may pick up your preferred pair, then setup Spreado as follows:
+Spreado assumes a pair of a state managing lib and a data fetching lib has been adopted by your modern React app. It aims to integrate with them well but won't re-invent wheels itself. Most well-known libs of the categories (e.g. [Redux](https://github.com/reduxjs/redux), [MobX](https://github.com/mobxjs/mobx), [React Query](https://github.com/tannerlinsley/react-query), [SWR](https://github.com/vercel/swr)) have been supported by spreado. You may pick up your preferred pair, then setup spreado as follows:
 
 #### With Redux and React Query
 
 ```tsx
+// Requires peer dependencies installed: `react`, `redux`, `react-redux`, `react-query`.
+
+import React, {FC} from 'react';
 import {createStore, combineReducers} from 'redux';
 import {Provider as ReduxProvider} from 'react-redux';
 import {QueryClient, QueryClientProvider} from 'react-query';
@@ -129,19 +132,24 @@ const queryClient = new QueryClient();
 const spreadoSetup = new SpreadoSetupForReduxReactQuery({store, queryClient});
 
 const App: FC = () => {
-  <ReduxProvider store={store}>
-    <QueryClientProvider client={queryClient}>
-      <SpreadoSetupProvider setup={spreadoSetup}>
-        <div>...</div>
-      </SpreadoSetupProvider>
-    </QueryClientProvider>
-  </ReduxProvider>;
+  return (
+    <ReduxProvider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <SpreadoSetupProvider setup={spreadoSetup}>
+          <div>...</div>
+        </SpreadoSetupProvider>
+      </QueryClientProvider>
+    </ReduxProvider>
+  );
 };
 ```
 
 #### With Redux Toolkit and React Query
 
 ```tsx
+// Requires peer dependencies installed: `react`, `@reduxjs/toolkit`, `react-redux`, `react-query`.
+
+import React, {FC} from 'react';
 import {configureStore} from '@reduxjs/toolkit';
 import {Provider as ReduxProvider} from 'react-redux';
 import {QueryClient, QueryClientProvider} from 'react-query';
@@ -159,19 +167,24 @@ const queryClient = new QueryClient();
 const spreadoSetup = new SpreadoSetupForReduxReactQuery({store, queryClient});
 
 const App: FC = () => {
-  <ReduxProvider store={store}>
-    <QueryClientProvider client={queryClient}>
-      <SpreadoSetupProvider setup={spreadoSetup}>
-        <div>...</div>
-      </SpreadoSetupProvider>
-    </QueryClientProvider>
-  </ReduxProvider>;
+  return (
+    <ReduxProvider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <SpreadoSetupProvider setup={spreadoSetup}>
+          <div>...</div>
+        </SpreadoSetupProvider>
+      </QueryClientProvider>
+    </ReduxProvider>
+  );
 };
 ```
 
 #### With Redux and SWR
 
 ```tsx
+// Requires peer dependencies installed: `react`, `redux`, `react-redux`, `swr`.
+
+import React, {FC} from 'react';
 import {createStore, combineReducers} from 'redux';
 import {Provider as ReduxProvider} from 'react-redux';
 import {SpreadoSetupForReduxSwr, SpreadoSetupProvider, spreadoReduxReducerPack} from 'spreado';
@@ -180,17 +193,22 @@ const store = createStore(combineReducers(spreadoReduxReducerPack));
 const spreadoSetup = new SpreadoSetupForReduxSwr({store});
 
 const App: FC = () => {
-  <ReduxProvider store={store}>
-    <SpreadoSetupProvider setup={spreadoSetup}>
-      <div>...</div>
-    </SpreadoSetupProvider>
-  </ReduxProvider>;
+  return (
+    <ReduxProvider store={store}>
+      <SpreadoSetupProvider setup={spreadoSetup}>
+        <div>...</div>
+      </SpreadoSetupProvider>
+    </ReduxProvider>
+  );
 };
 ```
 
 #### With Redux Toolkit and SWR
 
 ```tsx
+// Requires peer dependencies installed: `react`, `@reduxjs/toolkit`, `react-redux`, `swr`.
+
+import React, {FC} from 'react';
 import {configureStore} from '@reduxjs/toolkit';
 import {Provider as ReduxProvider} from 'react-redux';
 import {SpreadoSetupForReduxSwr, SpreadoSetupProvider, spreadoReduxReducerPack} from 'spreado';
@@ -202,17 +220,22 @@ const store = configureStore({
 const spreadoSetup = new SpreadoSetupForReduxSwr({store});
 
 const App: FC = () => {
-  <ReduxProvider store={store}>
-    <SpreadoSetupProvider setup={spreadoSetup}>
-      <div>...</div>
-    </SpreadoSetupProvider>
-  </ReduxProvider>;
+  return (
+    <ReduxProvider store={store}>
+      <SpreadoSetupProvider setup={spreadoSetup}>
+        <div>...</div>
+      </SpreadoSetupProvider>
+    </ReduxProvider>
+  );
 };
 ```
 
 #### With MobX and React Query
 
 ```tsx
+// Requires peer dependencies installed: `react`, `mobx`, `react-query`.
+
+import React, {FC} from 'react';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {SpreadoSetupForMobXReactQuery, SpreadoSetupProvider} from 'spreado';
 
@@ -220,25 +243,33 @@ const queryClient = new QueryClient();
 const spreadoSetup = new SpreadoSetupForMobXReactQuery({queryClient});
 
 const App: FC = () => {
-  <QueryClientProvider client={queryClient}>
-    <SpreadoSetupProvider setup={spreadoSetup}>
-      <div>...</div>
-    </SpreadoSetupProvider>
-  </QueryClientProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <SpreadoSetupProvider setup={spreadoSetup}>
+        <div>...</div>
+      </SpreadoSetupProvider>
+    </QueryClientProvider>
+  );
 };
 ```
 
 #### With MobX and SWR
 
 ```tsx
+// Requires peer dependencies installed: `react`, `mobx`, `swr`.
+
+import React, {FC} from 'react';
+import {SWRConfig} from 'swr';
 import {SpreadoSetupForMobXSwr, SpreadoSetupProvider} from 'spreado';
 
 const spreadoSetup = new SpreadoSetupForMobXSwr();
 
 const App: FC = () => {
-  <SpreadoSetupProvider setup={spreadoSetup}>
-    <div>...</div>
-  </SpreadoSetupProvider>;
+  return (
+    <SpreadoSetupProvider setup={spreadoSetup}>
+      <div>...</div>
+    </SpreadoSetupProvider>
+  );
 };
 ```
 
