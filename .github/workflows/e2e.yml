@@ -1,0 +1,27 @@
+name: E2E
+
+on:
+  workflow_call:
+    secrets:
+      CODECOV_TOKEN:
+        required: true
+  pull_request:
+    branches:
+      - main
+      - release
+
+jobs:
+  main:
+    name: Main
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install and build
+        run: yarn
+      - name: E2E
+        run: yarn e2e

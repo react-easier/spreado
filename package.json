@@ -27,8 +27,9 @@
   "scripts": {
     "build": "tsc --project configs/tsconfig.prod.json",
     "watch": "yarn build --watch",
-    "test": "jest",
+    "test": "jest --testPathIgnorePatterns e2e",
     "coverage": "yarn test --coverage",
+    "e2e": "yarn jest --testPathIgnorePatterns src",
     "clean": "concurrently \"yarn:clean:*\"",
     "clean:built": "rimraf lib",
     "clean:coverage": "rimraf coverage",
@@ -49,7 +50,8 @@
     "react": ">=16",
     "react-query": ">=3",
     "react-redux": ">=7",
-    "redux": ">=4"
+    "redux": ">=4",
+    "swr": ">=1"
   },
   "peerDependenciesMeta": {
     "mobx": {
@@ -63,14 +65,19 @@
     },
     "redux": {
       "optional": true
+    },
+    "swr": {
+      "optional": true
     }
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
+    "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.5",
     "@testing-library/react-hooks": "^7.0.2",
+    "@testing-library/user-event": "^14.2.0",
     "@types/jest": "^27.4.1",
     "@types/lodash": "^4.14.182",
     "@types/react": "^16.9.56",
@@ -78,6 +85,7 @@
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
     "concurrently": "^7.1.0",
+    "delay": "^5.0.0",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
@@ -95,6 +103,7 @@
     "react-redux": "^7.2.8",
     "redux": "^4.2.0",
     "rimraf": "^3.0.2",
+    "swr": "^1.3.0",
     "ts-jest": "^27.1.4",
     "typescript": "^4.6.3"
   }

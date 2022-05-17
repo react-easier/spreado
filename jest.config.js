@@ -1,6 +1,7 @@
 module.exports = {
-  preset: 'ts-jest/presets/js-with-ts',
+  preset: 'ts-jest',
   testEnvironment: 'jsdom',
-  testMatch: ['**/__tests__/**/*.[jt]s?(x)', `<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)`],
+  testPathIgnorePatterns: ['/node_modules/', '/lib/'],
+  coveragePathIgnorePatterns: ['/node_modules/', '/lib/'],
   setupFilesAfterEnv: ['<rootDir>/configs/setupAfterEnv.ts'],
 };
