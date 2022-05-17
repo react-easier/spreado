@@ -59,7 +59,9 @@ for (const [testName, createProvider] of Object.entries({
     const Provider: FC = ({children}) => {
       return (
         <ReduxProvider store={store}>
-          <SpreadoSetupProvider setup={spreadoSetup}>{children}</SpreadoSetupProvider>
+          <SWRConfig value={{provider: () => new Map()}}>
+            <SpreadoSetupProvider setup={spreadoSetup}>{children}</SpreadoSetupProvider>
+          </SWRConfig>
         </ReduxProvider>
       );
     };
