@@ -5,17 +5,17 @@
   },
   "include": ["../src"],
   "exclude": [
-    "**/node_modules",
-    "**/lib",
-    "**/es",
-    "**/dist",
-    "**/out",
-    "**/build",
-    "**/coverage",
-    "**/e2e",
-    "**/fixtures",
-    "**/__tests__",
-    "**/*.spec.*",
-    "**/*.test.*"
+    "/**/node_modules",
+    "/**/lib",
+    "/**/es",
+    "/**/dist",
+    "/**/out",
+    "/**/build",
+    "/**/coverage",
+    "/**/e2e",
+    "/**/fixtures",
+    "/**/__tests__",
+    "/**/*.spec.*",
+    "/**/*.test.*"
   ]
 }

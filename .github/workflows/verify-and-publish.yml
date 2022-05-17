@@ -7,21 +7,26 @@ on:
       - release
 
 jobs:
+  lint:
+    name: Lint
+    uses: ./.github/workflows/lint.yml
+
   test:
     name: Test
     uses: ./.github/workflows/test.yml
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-  lint:
-    name: Lint
-    uses: ./.github/workflows/lint.yml
+  e2e:
+    name: E2E
+    uses: ./.github/workflows/e2e.yml
 
   publish:
     name: Publish
     needs:
-      - test
       - lint
+      - test
+      - e2e
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout codebase
