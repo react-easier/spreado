@@ -1,7 +1,5 @@
 import {generateSpreadKey} from '../core';
 
-export const SPREADO_REDUX_STATE_INDEX = 'spreado';
-
 export const SPREADO_REDUX_ACTION_SET_STATE = 'SPREADO_REDUX_ACTION_SET_STATE';
 export const SPREADO_REDUX_ACTION_RESET_STATE = 'SPREADO_REDUX_ACTION_RESET_STATE';
 export const SPREADO_REDUX_ACTION_BULK_SET_STATE = 'SPREADO_REDUX_ACTION_BULK_SET_STATE';
@@ -59,6 +57,8 @@ export default function reducer(
   }
 }
 
+export const SPREADO_REDUX_STATE_INDEX = 'spreado';
+
 declare module 'redux' {
   interface DefaultRootState {
     [SPREADO_REDUX_STATE_INDEX]?: SpreadoReduxState;
@@ -71,7 +71,7 @@ declare module 'react-redux' {
   }
 }
 
-export const spreadoReducerPack = {[SPREADO_REDUX_STATE_INDEX]: reducer};
+export const spreadoReduxReducerPack = {[SPREADO_REDUX_STATE_INDEX]: reducer as () => never};
 
 export interface SpreadoReduxPreloadedState {
   [SPREADO_REDUX_STATE_INDEX]: SpreadoReduxState;

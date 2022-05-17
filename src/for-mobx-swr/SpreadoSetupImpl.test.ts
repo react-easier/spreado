@@ -17,12 +17,12 @@ describe('SpreadoSetupForMobXSwr', () => {
   });
 
   describe('#constructor', () => {
-    it('uses external store if store is given', () => {
+    test('uses external store if store is given', () => {
       const setup = new SpreadoSetupForMobXSwr({store});
       expect(setup).toHaveProperty('options.store', store);
     });
 
-    it('uses builtin store if store not given', () => {
+    test('uses builtin store if store not given', () => {
       const setup = new SpreadoSetupForMobXSwr();
       expect(setup).toHaveProperty('options.store', builtinStore);
     });

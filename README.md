@@ -74,7 +74,7 @@ const INDEX_OF_SOME_DATA_QUERY = 'INDEX_OF_SOME_DATA_QUERY';
 
 function useSomeDataQuerySpreadOut(params: ParamsForSomeDataQuery) {
   return useSpreadOut(
-    INDEX_OF_SOME_DATA_QUERY
+    INDEX_OF_SOME_DATA_QUERY,
     useQuery([INDEX_OF_SOME_DATA_QUERY, params], () => fetch_some_data_with_params(params))
   );
 }
@@ -118,9 +118,13 @@ Spreado assumes a pair of a state managing lib and a data fetching lib has been 
 import {createStore, combineReducers} from 'redux';
 import {Provider as ReduxProvider} from 'react-redux';
 import {QueryClient, QueryClientProvider} from 'react-query';
-import {SpreadoSetupForReduxReactQuery, SpreadoSetupProvider, spreadoReducerPack} from 'spreado';
+import {
+  SpreadoSetupForReduxReactQuery,
+  SpreadoSetupProvider,
+  spreadoReduxReducerPack,
+} from 'spreado';
 
-const store = createStore(combineReducers(spreadoReducerPack));
+const store = createStore(combineReducers(spreadoReduxReducerPack));
 const queryClient = new QueryClient();
 const spreadoSetup = new SpreadoSetupForReduxReactQuery({store, queryClient});
 
@@ -141,9 +145,16 @@ const App: FC = () => {
 import {configureStore} from '@reduxjs/toolkit';
 import {Provider as ReduxProvider} from 'react-redux';
 import {QueryClient, QueryClientProvider} from 'react-query';
-import {SpreadoSetupForReduxReactQuery, SpreadoSetupProvider, spreadoReducerPack} from 'spreado';
+import {
+  SpreadoSetupForReduxReactQuery,
+  SpreadoSetupProvider,
+  spreadoReduxReducerPack,
+} from 'spreado';
 
-const store = configureStore({reducer: spreadoReducerPack});
+const store = configureStore({
+  reducer: spreadoReduxReducerPack,
+  middleware: (m) => m({serializableCheck: false}),
+});
 const queryClient = new QueryClient();
 const spreadoSetup = new SpreadoSetupForReduxReactQuery({store, queryClient});
 
@@ -163,9 +174,9 @@ const App: FC = () => {
 ```tsx
 import {createStore, combineReducers} from 'redux';
 import {Provider as ReduxProvider} from 'react-redux';
-import {SpreadoSetupForReduxSwr, SpreadoSetupProvider, spreadoReducerPack} from 'spreado';
+import {SpreadoSetupForReduxSwr, SpreadoSetupProvider, spreadoReduxReducerPack} from 'spreado';
 
-const store = createStore(combineReducers(spreadoReducerPack));
+const store = createStore(combineReducers(spreadoReduxReducerPack));
 const spreadoSetup = new SpreadoSetupForReduxSwr({store});
 
 const App: FC = () => {
@@ -182,9 +193,12 @@ const App: FC = () => {
 ```tsx
 import {configureStore} from '@reduxjs/toolkit';
 import {Provider as ReduxProvider} from 'react-redux';
-import {SpreadoSetupForReduxSwr, SpreadoSetupProvider, spreadoReducerPack} from 'spreado';
+import {SpreadoSetupForReduxSwr, SpreadoSetupProvider, spreadoReduxReducerPack} from 'spreado';
 
-const store = configureStore({reducer: spreadoReducerPack});
+const store = configureStore({
+  reducer: spreadoReduxReducerPack,
+  middleware: (m) => m({serializableCheck: false}),
+});
 const spreadoSetup = new SpreadoSetupForReduxSwr({store});
 
 const App: FC = () => {

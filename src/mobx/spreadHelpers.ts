@@ -11,7 +11,7 @@ export function useSpreadOut<T>(
   value: T
 ): T {
   const key = useMemo(() => generateSpreadKey(index), [index]);
-  const [foundValue, setFoundValue] = useState<T | undefined>(undefined);
+  const [foundValue, setFoundValue] = useState(() => store.findValue<T>(key));
 
   useEffect(() => {
     counter[key] = key in counter ? counter[key] + 1 : 1;
@@ -45,9 +45,7 @@ export function useSpreadIn<T>(
   fallback?: Partial<T>
 ): T | Partial<T> | undefined {
   const key = useMemo(() => generateSpreadKey(index), [index]);
-  const [foundValue, setFoundValue] = useState<T | Partial<T> | undefined>(() =>
-    store.findValue<T>(key, fallback)
-  );
+  const [foundValue, setFoundValue] = useState(() => store.findValue<T>(key, fallback));
 
   useEffect(() => {
     return reaction(
