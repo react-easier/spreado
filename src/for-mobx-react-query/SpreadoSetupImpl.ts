@@ -1,6 +1,6 @@
 import {QueryClient} from 'react-query';
 import {generateSpreadKey, SpreadoSetupBase, SpreadoSetupOptions} from '../core';
-import {getSpreadIn, setSpreadOut, SpreadoMobXStore, useSpreadIn, useSpreadOut} from '../mobx';
+import {getSpreadIn, setSpreadOut, SpreadoMobXState, SpreadoMobXStore, useSpreadIn, useSpreadOut} from '../mobx';
 
 interface Options extends SpreadoSetupOptions {
   store?: SpreadoMobXStore;
@@ -19,17 +19,17 @@ export class SpreadoSetupForMobXReactQuery extends SpreadoSetupBase {
   constructor(options: Options) {
     super(options);
     this.options = {
-      store: options.store ?? new SpreadoMobXStore(),
       ...options,
+      store: options.store ?? new SpreadoMobXStore(),
     };
 
     const {enableAutoSpread} = this.options;
     if (enableAutoSpread) {
-      this.autoSpreadOutQueries();
+      this.enableQueriesAutoSpreadOut();
     }
   }
 
-  autoSpreadOutQueries() {
+  enableQueriesAutoSpreadOut() {
     const {store, queryClient} = this.options;
     const queryCache = queryClient.getQueryCache();
     queryCache.subscribe(() => {
@@ -38,7 +38,7 @@ export class SpreadoSetupForMobXReactQuery extends SpreadoSetupBase {
           ...result,
           [generateSpreadKey(queryKey)]: queryClient.getQueryState(queryKey),
         }),
-        {}
+        {} as SpreadoMobXState
       );
 
       store.bulkSetState(stateKvMap);
