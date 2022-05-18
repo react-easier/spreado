@@ -1,7 +1,6 @@
 import {renderHook} from '@testing-library/react-hooks';
 import {mocked} from 'jest-mock';
 import {get, noop, times, uniqueId, unzip, zipObject} from 'lodash';
-import { makeObservable } from 'mobx';
 import {QueryCache, QueryClient} from 'react-query';
 import {generateSpreadKey} from '../core';
 import {
@@ -18,11 +17,13 @@ const store: SpreadoMobXStore = {} as never;
 const builtinStore: SpreadoMobXStore = {} as never;
 
 jest.mock('../mobx');
-jest.mock('mobx');
 
 mocked(SpreadoMobXStore).mockReturnValue(builtinStore);
 
-const queryClient: QueryClient = new QueryClient();
+const queryClient: QueryClient = {
+  getQueryCache: () => queryCache,
+  getQueryState: jest.fn(),
+} as never;
 
 const queryCache: QueryCache = {
   subscribe: jest.fn(),
@@ -98,8 +99,17 @@ describe('SpreadoSetupForMobXReactQuery', () => {
     });
 
     test('bulk updates state on query cache change', () => {
-      const store = new SpreadoMobXStore();
-      const spiedBulkSetState = jest.spyOn(SpreadoMobXStore.prototype,'bulkSetState')
+      const store: SpreadoMobXStore = {
+        bulkSetState: jest.fn(),
+      } as never;
+      let triggerQueryCacheChange!: () => void;
+      mocked(queryCache.subscribe).mockImplementationOnce((fn) => {
+        if (fn) {
+          triggerQueryCacheChange = fn;
+        }
+        return noop;
+      });
+
       const queryKeyStateMap = zipObject(...unzip(times(5).map(() => [uniqueId(), uniqueId()])));
       mocked(queryCache.getAll).mockReturnValueOnce(
         Object.keys(queryKeyStateMap).map((queryKey) => ({queryKey} as never))
@@ -117,8 +127,9 @@ describe('SpreadoSetupForMobXReactQuery', () => {
       for (const k in queryKeyStateMap) {
         kvMap[generateSpreadKey(k)] = queryKeyStateMap[k];
       }
-      expect(queryCache.subscribe).toBeCalled();
-      expect(spiedBulkSetState).toBeCalledWith(kvMap);
+      triggerQueryCacheChange();
+
+      expect(store.bulkSetState).toBeCalledWith(kvMap);
     });
   });
 });
