@@ -1,6 +1,13 @@
 import {QueryClient} from 'react-query';
 import {generateSpreadKey, SpreadoSetupBase, SpreadoSetupOptions} from '../core';
-import {getSpreadIn, setSpreadOut, SpreadoMobXState, SpreadoMobXStore, useSpreadIn, useSpreadOut} from '../mobx';
+import {
+  getSpreadIn,
+  setSpreadOut,
+  SpreadoMobXState,
+  SpreadoMobXStore,
+  useSpreadIn,
+  useSpreadOut,
+} from '../mobx';
 
 interface Options extends SpreadoSetupOptions {
   store?: SpreadoMobXStore;
