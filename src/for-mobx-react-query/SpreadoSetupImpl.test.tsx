@@ -33,11 +33,11 @@ const queryCache: QueryCache = {
 describe('SpreadoSetupForMobXReactQuery', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mocked(queryClient.getQueryState).mockReturnValue(null as never);
   });
 
   describe('#constructor', () => {
     test('uses external store if store is given', () => {
-      const store = {test: 'test'} as never;
       const setup = new SpreadoSetupForMobXReactQuery({queryClient, store});
       expect(setup).toHaveProperty('options.store', store);
     });
