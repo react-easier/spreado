@@ -11,6 +11,7 @@ import useSWR, {SWRConfig} from 'swr';
 import {
   setSpreadOut,
   spreadoReduxReducerPack,
+  SpreadoSetupForMobXReactQuery,
   SpreadoSetupForMobXSwr,
   SpreadoSetupForReduxReactQuery,
   SpreadoSetupForReduxSwr,
@@ -80,6 +81,18 @@ for (const [testName, createProvider] of Object.entries({
             <SpreadoSetupProvider setup={spreadoSetup}>{children}</SpreadoSetupProvider>
           </SWRConfig>
         </ReduxProvider>
+      );
+    };
+    return Provider;
+  },
+  'mobx, react-query': () => {
+    const queryClient = new QueryClient();
+    const spreadoSetup = new SpreadoSetupForMobXReactQuery({queryClient});
+    const Provider: FC = ({children}) => {
+      return (
+        <QueryClientProvider client={queryClient}>
+          <SpreadoSetupProvider setup={spreadoSetup}>{children}</SpreadoSetupProvider>
+        </QueryClientProvider>
       );
     };
     return Provider;

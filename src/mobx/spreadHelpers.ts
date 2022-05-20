@@ -11,7 +11,9 @@ export function useSpreadOut<T>(
   value: T
 ): T {
   const key = useMemo(() => generateSpreadKey(index), [index]);
+
   const [foundValue, setFoundValue] = useState(() => store.findValue<T>(key));
+  const refFoundValue = useRef(foundValue);
 
   useEffect(() => {
     counter[key] = key in counter ? counter[key] + 1 : 1;
@@ -31,8 +33,13 @@ export function useSpreadOut<T>(
   useEffect(() => {
     return reaction(
       () => store.findValue<T>(key),
-      (foundValue) => setFoundValue(foundValue),
-      {equals: isEqual, fireImmediately: true}
+      (foundValue) => {
+        if (!isEqual(foundValue, refFoundValue.current)) {
+          setFoundValue(foundValue);
+          refFoundValue.current = foundValue;
+        }
+      },
+      {fireImmediately: true}
     );
   }, [key, store]);
 
@@ -45,8 +52,10 @@ export function useSpreadIn<T>(
   fallback?: Partial<T>
 ): T | Partial<T> | undefined {
   const key = useMemo(() => generateSpreadKey(index), [index]);
-  const refFallback = useRef(fallback);
+
   const [foundValue, setFoundValue] = useState(() => store.findValue<T>(key, fallback));
+  const refFallback = useRef(fallback);
+  const refFoundValue = useRef(foundValue);
 
   useEffect(() => {
     refFallback.current = fallback;
@@ -55,8 +64,13 @@ export function useSpreadIn<T>(
   useEffect(() => {
     return reaction(
       () => store.findValue<T>(key, refFallback.current),
-      (foundValue) => setFoundValue(foundValue),
-      {equals: isEqual, fireImmediately: true}
+      (foundValue) => {
+        if (!isEqual(foundValue, refFoundValue.current)) {
+          setFoundValue(foundValue);
+          refFoundValue.current = foundValue;
+        }
+      },
+      {fireImmediately: true}
     );
   }, [key, store]);
 
