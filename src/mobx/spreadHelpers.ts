@@ -1,6 +1,6 @@
 import {isEqual} from 'lodash';
 import {reaction} from 'mobx';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {generateSpreadKey} from '../core';
 import {SpreadoMobXStore} from './SpreadoMobXStore';
 
@@ -32,9 +32,9 @@ export function useSpreadOut<T>(
     return reaction(
       () => store.findValue<T>(key),
       (foundValue) => setFoundValue(foundValue),
-      {equals: isEqual}
+      {equals: isEqual, fireImmediately: true}
     );
-  });
+  }, [key, store]);
 
   return foundValue ?? value;
 }
@@ -45,15 +45,20 @@ export function useSpreadIn<T>(
   fallback?: Partial<T>
 ): T | Partial<T> | undefined {
   const key = useMemo(() => generateSpreadKey(index), [index]);
+  const refFallback = useRef(fallback);
   const [foundValue, setFoundValue] = useState(() => store.findValue<T>(key, fallback));
 
   useEffect(() => {
+    refFallback.current = fallback;
+  }, [fallback]);
+
+  useEffect(() => {
     return reaction(
-      () => store.findValue<T>(key, fallback),
+      () => store.findValue<T>(key, refFallback.current),
       (foundValue) => setFoundValue(foundValue),
-      {equals: isEqual}
+      {equals: isEqual, fireImmediately: true}
     );
-  });
+  }, [key, store]);
 
   return foundValue;
 }

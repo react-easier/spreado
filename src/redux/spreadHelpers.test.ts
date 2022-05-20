@@ -37,11 +37,13 @@ describe('useSpreadOut', () => {
     expect(setSpreadoReduxState).toBeCalledWith(key, inputValue1);
     expect(findValueInRootState).toHaveBeenNthCalledWith(1, rootState, key);
     expect(result.current).toEqual(inputValue1);
+
     // returns input value on rerender after initial call, before redux state updated
     rerender();
     expect(findValueInRootState).toBeCalledWith(rootState, key);
     expect(findValueInRootState).toHaveBeenNthCalledWith(2, rootState, key);
     expect(result.current).toEqual(inputValue1);
+
     // returns value in redux state after redux state updated
     const foundValue1 = uniqueId();
     mocked(findValueInRootState).mockReturnValue(foundValue1);
@@ -55,10 +57,12 @@ describe('useSpreadOut', () => {
     expect(setSpreadoReduxState).toBeCalledWith(key, inputValue2);
     expect(findValueInRootState).toHaveBeenNthCalledWith(4, rootState, key);
     expect(result.current).toEqual(foundValue1);
+
     // returns value in old redux state on rerender after second call, before redux state updated
     rerender();
     expect(findValueInRootState).toHaveBeenNthCalledWith(5, rootState, key);
     expect(result.current).toEqual(foundValue1);
+
     // returns value in new redux state on rerender after redux state updated
     const foundValue2 = uniqueId();
     mocked(findValueInRootState).mockReturnValue(foundValue2);
