@@ -35,6 +35,10 @@ describe('useSpreadOut', () => {
     );
     expect(result.current).toEqual(inputValue1);
 
+    // returns input value on rerender after initial call, before mobx state updated
+    rerender();
+    expect(result.current).toEqual(inputValue1);
+
     // returns value in mobx state after mobx state updated
     const foundValue1 = uniqueId();
     store.setState(key, foundValue1);

@@ -9,7 +9,6 @@ import {resetSpreadoReduxState, setSpreadoReduxState} from './module';
 export function useSpreadOut<T>(counter: Record<string, number>, index: unknown, value: T): T {
   const dispatch = useDispatch();
   const key = useMemo(() => generateSpreadKey(index), [index]);
-  const refHasSet = useRef(false);
   const refTrackedValue = useRef<T | symbol>(Symbol());
 
   useEffect(() => {
@@ -26,13 +25,11 @@ export function useSpreadOut<T>(counter: Record<string, number>, index: unknown,
   useEffect(() => {
     if (!isEqual(value, refTrackedValue.current)) {
       dispatch(setSpreadoReduxState(key, value));
-      refHasSet.current = true;
       refTrackedValue.current = value;
     }
   }, [dispatch, key, value]);
 
-  const foundValue = useSelector((rootState) => findValueInRootState<T>(rootState, key));
-  return refHasSet.current ? foundValue ?? value : value;
+  return useSelector((rootState) => findValueInRootState<T>(rootState, key)) ?? value;
 }
 
 export function useSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined {

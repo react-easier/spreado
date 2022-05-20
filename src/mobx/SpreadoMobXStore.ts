@@ -1,5 +1,5 @@
 import {action, makeObservable, observable} from 'mobx';
-import {generateSpreadKey} from '../core';
+import {generateSpreadKey, SpreadoIndexValueMap} from '../core';
 
 export type SpreadoMobXState = Record<string, unknown>;
 
@@ -40,7 +40,7 @@ export class SpreadoMobXStore {
     this.state = {...this.state, ...kvMap};
   }
 
-  static createPreloadedState(ivMap: Record<string | number | symbol, unknown>): SpreadoMobXState {
+  static createPreloadedState(ivMap: SpreadoIndexValueMap): SpreadoMobXState {
     const preloadedState: SpreadoMobXState = Object.keys(ivMap).reduce(
       (acc, index) => ({...acc, [generateSpreadKey(index)]: ivMap[index]}),
       {}

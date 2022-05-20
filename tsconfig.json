@@ -11,12 +11,21 @@
     "module": "CommonJS",
     "outDir": "lib",
     "resolveJsonModule": true,
-    "rootDir": "src",
+    "rootDir": ".",
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "ES5"
   },
-  "include": ["src"],
-  "exclude": ["**/fixtures"]
+  "include": ["."],
+  "exclude": [
+    "/**/node_modules",
+    "/**/lib",
+    "/**/es",
+    "/**/dist",
+    "/**/out",
+    "/**/build",
+    "/**/coverage",
+    "/**/fixtures"
+  ]
 }
