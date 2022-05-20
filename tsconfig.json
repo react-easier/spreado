@@ -6,6 +6,7 @@
     "downlevelIteration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
     "jsx": "react",
     "lib": ["ESNext", "DOM"],
     "module": "CommonJS",
