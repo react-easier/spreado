@@ -57,10 +57,10 @@
     "mobx": {
       "optional": true
     },
-    "react-redux": {
+    "react-query": {
       "optional": true
     },
-    "react-query": {
+    "react-redux": {
       "optional": true
     },
     "redux": {

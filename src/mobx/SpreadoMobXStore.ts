@@ -1,5 +1,4 @@
-import {action, makeObservable, observable} from 'mobx';
-import {generateSpreadKey, SpreadoIndexValueMap} from '../core';
+import {generateSpreadKey, requirePeer, SpreadoIndexValueMap} from '../core';
 
 export type SpreadoMobXState = Record<string, unknown>;
 
@@ -7,6 +6,7 @@ export class SpreadoMobXStore {
   state: SpreadoMobXState;
 
   constructor(preloadedState: SpreadoMobXState = {}) {
+    const {action, makeObservable, observable} = requirePeer('mobx');
     this.state = preloadedState;
     makeObservable(this, {
       state: observable.ref,

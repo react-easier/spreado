@@ -1,4 +1,4 @@
-import {Store} from 'redux';
+import type {Store} from 'redux';
 import {SpreadoSetupBase, SpreadoSetupOptions} from '../core';
 import {getSpreadIn, setSpreadOut, useSpreadIn, useSpreadOut} from '../redux';
 
