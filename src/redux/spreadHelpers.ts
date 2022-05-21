@@ -1,12 +1,12 @@
 import {isEqual} from 'lodash';
 import {useEffect, useMemo, useRef} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {Store} from 'redux';
-import {generateSpreadKey} from '../core';
+import type {Store} from 'redux';
+import {generateSpreadKey, useRequirePeer} from '../core';
 import {findValueInRootState} from './findValue';
 import {resetSpreadoReduxState, setSpreadoReduxState} from './module';
 
 export function useSpreadOut<T>(counter: Record<string, number>, index: unknown, value: T): T {
+  const {useDispatch, useSelector} = useRequirePeer('react-redux');
   const dispatch = useDispatch();
   const key = useMemo(() => generateSpreadKey(index), [index]);
   const refTrackedValue = useRef<T | symbol>(Symbol());
@@ -33,6 +33,7 @@ export function useSpreadOut<T>(counter: Record<string, number>, index: unknown,
 }
 
 export function useSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined {
+  const {useSelector} = useRequirePeer('react-redux');
   const key = useMemo(() => generateSpreadKey(index), [index]);
   return useSelector((rootState) => findValueInRootState(rootState, key, fallback));
 }

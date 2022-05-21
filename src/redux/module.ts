@@ -1,4 +1,4 @@
-import {AnyAction, Reducer} from 'redux';
+import type {AnyAction, Reducer} from 'redux';
 import {generateSpreadKey, SpreadoIndexValueMap} from '../core';
 
 export const SPREADO_REDUX_ACTION_SET_STATE = 'SPREADO_REDUX_ACTION_SET_STATE';
