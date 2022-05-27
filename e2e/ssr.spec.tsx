@@ -1,16 +1,19 @@
 import {configureStore} from '@reduxjs/toolkit';
-import {waitFor} from '@testing-library/react';
-import {uniqueId} from 'lodash';
+import {screen, waitFor} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import delay from 'delay';
+import {random, uniqueId} from 'lodash';
 import React, {FC} from 'react';
 import ReactDOM from 'react-dom';
 import {renderToString} from 'react-dom/server';
-import {QueryClient, QueryClientProvider} from 'react-query';
+import {QueryClient, QueryClientProvider, useQuery} from 'react-query';
 import {Provider as ReduxProvider} from 'react-redux';
 import {combineReducers, createStore} from 'redux';
 import resolveCaller from 'resolve/lib/caller';
-import {SWRConfig} from 'swr';
+import useSWR, {SWRConfig} from 'swr';
 import {
   createSpreadoReduxPreloadedState,
+  renderQueryResult,
   SpreadoIndexValueMap,
   SpreadoMobXStore,
   spreadoReduxReducerPack,
@@ -22,6 +25,7 @@ import {
   useSpreadIn,
   useSpreadOut,
 } from '..';
+import {renderSwrResponse} from '../src';
 
 jest.mock('react', () => {
   const React = jest.requireActual('react');
@@ -169,13 +173,18 @@ for (const [testName, createProvider] of Object.entries({
       };
 
       const ivMap: SpreadoIndexValueMap = {[INDEX_OF_SOMETHING]: somethingPreloaded};
+      const App: FC = () => (
+        <>
+          <ComponentA />
+          <ComponentB />
+        </>
+      );
 
       // simulates server side rendering
       const ServerSideProvider = createProvider(ivMap);
       const htmlStr = renderToString(
         <ServerSideProvider>
-          <ComponentA />
-          <ComponentB />
+          <App />
         </ServerSideProvider>
       );
 
@@ -184,32 +193,212 @@ for (const [testName, createProvider] of Object.entries({
       testDom.innerHTML = htmlStr;
       document.body.appendChild(testDom);
 
-      expect(testDom.querySelector('[data-tn="text-a"]')).toHaveTextContent(somethingPreloaded);
-      expect(testDom.querySelector('[data-tn="text-b"]')).toHaveTextContent(somethingPreloaded);
+      expect(screen.queryByTestId('text-a')).toHaveTextContent(somethingPreloaded);
+      expect(screen.queryByTestId('text-b')).toHaveTextContent(somethingPreloaded);
 
       // hydrates DOM as React nodes
       const ClientSideProvider = createProvider(ivMap);
       ReactDOM.hydrate(
         <ClientSideProvider>
-          <ComponentA />
-          <ComponentB />
+          <App />
         </ClientSideProvider>,
         testDom
       );
 
-      expect(testDom.querySelector('[data-tn="text-a"]')).toHaveTextContent(somethingPreloaded);
-      expect(testDom.querySelector('[data-tn="text-b"]')).toHaveTextContent(somethingPreloaded);
+      expect(screen.queryByTestId('text-a')).toHaveTextContent(somethingPreloaded);
+      expect(screen.queryByTestId('text-b')).toHaveTextContent(somethingPreloaded);
 
       await waitFor(() =>
-        expect(testDom.querySelector('[data-tn="text-a"]')).toHaveTextContent(
-          somethingFromSomewhereElse
-        )
+        expect(screen.queryByTestId('text-a')).toHaveTextContent(somethingFromSomewhereElse)
       );
       await waitFor(() =>
-        expect(testDom.querySelector('[data-tn="text-b"]')).toHaveTextContent(
-          somethingFromSomewhereElse
+        expect(screen.queryByTestId('text-b')).toHaveTextContent(somethingFromSomewhereElse)
+      );
+
+      // disposes everything tested
+      ReactDOM.unmountComponentAtNode(testDom);
+    });
+
+    it('preloads a result of data fetching', async () => {
+      // Helpers
+
+      const temporaryStorage: {
+        currResultData: string;
+        prevResultData: string;
+      } = {
+        currResultData: '',
+        prevResultData: '',
+      };
+
+      function shuffleResultData() {
+        temporaryStorage.prevResultData = temporaryStorage.currResultData;
+        temporaryStorage.currResultData = uniqueId();
+      }
+
+      async function fetchSomeData() {
+        await delay(random(500, 800));
+        return temporaryStorage.currResultData;
+      }
+
+      // Testers
+
+      const INDEX_OF_SOME_DATA_QUERY = uniqueId();
+
+      function useSomeDataQuerySpreadOut() {
+        return useSpreadOut(
+          'RR_' + INDEX_OF_SOME_DATA_QUERY,
+          useQuery([INDEX_OF_SOME_DATA_QUERY], () => fetchSomeData())
+        );
+      }
+
+      function useSomeDataQuerySpreadIn() {
+        return useSpreadIn<ReturnType<typeof useSomeDataQuerySpreadOut>>(
+          'RR_' + INDEX_OF_SOME_DATA_QUERY,
+          {}
+        );
+      }
+
+      function useSomeDataFetchSpreadOut() {
+        return useSpreadOut(
+          'S_' + INDEX_OF_SOME_DATA_QUERY,
+          useSWR([INDEX_OF_SOME_DATA_QUERY], () => fetchSomeData())
+        );
+      }
+
+      function useSomeDataFetchSpreadIn() {
+        return useSpreadIn<ReturnType<typeof useSomeDataFetchSpreadOut>>(
+          'S_' + INDEX_OF_SOME_DATA_QUERY,
+          {}
+        );
+      }
+
+      const RR_ComponentA: FC = () => {
+        const {isLoading, isSuccess, data, refetch} = useSomeDataQuerySpreadOut();
+        return (
+          <div>
+            {isLoading && <div data-tn="loader-a">Loading A</div>}
+            {isSuccess && <div data-tn="result-a">{data}</div>}
+            <button data-tn="refresh" onClick={() => refetch()} />
+          </div>
+        );
+      };
+
+      const RR_ComponentB: FC = () => {
+        const {isLoading, isSuccess, data} = useSomeDataQuerySpreadIn();
+        return (
+          <div>
+            {isLoading && <div data-tn="loader-b">Loading B</div>}
+            {isSuccess && <div data-tn="result-b">{data}</div>}
+          </div>
+        );
+      };
+
+      const S_ComponentA = () => {
+        const {data, mutate} = useSomeDataFetchSpreadOut();
+        const isLoading = !data;
+        return (
+          <div>
+            {isLoading && <div data-tn="loader-a">Loading A</div>}
+            {data && <div data-tn="result-a">{data}</div>}
+            <button data-tn="refresh" onClick={() => mutate()} />
+          </div>
+        );
+      };
+
+      const S_ComponentB: FC = () => {
+        const {data} = useSomeDataFetchSpreadIn();
+        const isLoading = !data;
+        return (
+          <div>
+            {isLoading && <div data-tn="loader-b">Loading B</div>}
+            {data && <div data-tn="result-b">{data}</div>}
+          </div>
+        );
+      };
+
+      shuffleResultData();
+      const ivMap: SpreadoIndexValueMap = {
+        ['RR_' + INDEX_OF_SOME_DATA_QUERY]: renderQueryResult(temporaryStorage.currResultData),
+        ['S_' + INDEX_OF_SOME_DATA_QUERY]: renderSwrResponse(temporaryStorage.currResultData),
+      };
+      const App: FC = () => (
+        <div>
+          {testName.includes('react-query') && (
+            <>
+              <RR_ComponentA />
+              <RR_ComponentB />
+            </>
+          )}
+          {testName.includes('swr') && (
+            <>
+              <S_ComponentA />
+              <S_ComponentB />
+            </>
+          )}
+        </div>
+      );
+
+      // simulates server side rendering
+      const ServerSideProvider = createProvider(ivMap);
+      const htmlStr = renderToString(
+        <ServerSideProvider>
+          <App />
+        </ServerSideProvider>
+      );
+
+      // renders html as client side DOM
+      const testDom = document.createElement('div');
+      testDom.innerHTML = htmlStr;
+      document.body.appendChild(testDom);
+
+      expect(screen.queryByTestId('result-a')).toHaveTextContent(temporaryStorage.currResultData);
+      expect(screen.queryByTestId('result-b')).toHaveTextContent(temporaryStorage.currResultData);
+
+      // hydrates DOM as React nodes
+      const ClientSideProvider = createProvider(ivMap);
+      shuffleResultData();
+      ReactDOM.hydrate(
+        <ClientSideProvider>
+          <App />
+        </ClientSideProvider>,
+        testDom
+      );
+
+      // renders preloaded data on page render
+      expect(screen.queryByTestId('loader-a')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('result-a')).toHaveTextContent(temporaryStorage.prevResultData);
+      expect(screen.queryByTestId('loader-b')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('result-b')).toHaveTextContent(temporaryStorage.prevResultData);
+
+      // renders loadings on initial fetching
+      await waitFor(() => expect(screen.queryByTestId('loader-a')).toBeInTheDocument());
+      expect(screen.queryByTestId('result-a')).not.toBeInTheDocument();
+      await waitFor(() => expect(screen.queryByTestId('loader-b')).toBeInTheDocument());
+      expect(screen.queryByTestId('result-b')).not.toBeInTheDocument();
+
+      // renders new data on fetched
+      await waitFor(() => expect(screen.queryByTestId('loader-a')).not.toBeInTheDocument());
+      expect(screen.queryByTestId('result-a')).toHaveTextContent(temporaryStorage.currResultData);
+      await waitFor(() => expect(screen.queryByTestId('loader-b')).not.toBeInTheDocument());
+      expect(screen.queryByTestId('result-b')).toHaveTextContent(temporaryStorage.currResultData);
+
+      // triggers a refetch
+      shuffleResultData();
+      await userEvent.click(screen.getByTestId('refresh'));
+
+      // renders new data on refetched
+      await waitFor(() =>
+        expect(screen.queryByTestId('result-a')).not.toHaveTextContent(
+          temporaryStorage.prevResultData
         )
       );
+      expect(screen.queryByTestId('result-a')).toHaveTextContent(temporaryStorage.currResultData);
+      await waitFor(() =>
+        expect(screen.queryByTestId('result-b')).not.toHaveTextContent(
+          temporaryStorage.prevResultData
+        )
+      );
+      expect(screen.queryByTestId('result-b')).toHaveTextContent(temporaryStorage.currResultData);
 
       // disposes everything tested
       ReactDOM.unmountComponentAtNode(testDom);

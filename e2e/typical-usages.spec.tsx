@@ -232,9 +232,9 @@ for (const [testName, createProvider] of Object.entries({
         const {isLoading, isSuccess, data, refetch} = useSomeDataQuerySpreadOut(prepareParams());
         return (
           <div>
-            {isLoading && <div>Loading A</div>}
+            {isLoading && <div data-tn="loader-a">Loading A</div>}
             {isSuccess && <div data-tn="result-a">{data}</div>}
-            <button onClick={() => refetch()}>Refresh data</button>
+            <button data-tn="refresh" onClick={() => refetch()} />
           </div>
         );
       };
@@ -243,7 +243,7 @@ for (const [testName, createProvider] of Object.entries({
         const {isLoading, isSuccess, data} = useSomeDataQuerySpreadIn();
         return (
           <div>
-            {isLoading && <div>Loading B</div>}
+            {isLoading && <div data-tn="loader-b">Loading B</div>}
             {isSuccess && <div data-tn="result-b">{data}</div>}
           </div>
         );
@@ -254,9 +254,9 @@ for (const [testName, createProvider] of Object.entries({
         const isLoading = !data;
         return (
           <div>
-            {isLoading && <div>Loading A</div>}
+            {isLoading && <div data-tn="loader-a">Loading A</div>}
             {data && <div data-tn="result-a">{data}</div>}
-            <button onClick={() => mutate()}>Refresh data</button>
+            <button data-tn="refresh" onClick={() => mutate()} />
           </div>
         );
       };
@@ -266,7 +266,7 @@ for (const [testName, createProvider] of Object.entries({
         const isLoading = !data;
         return (
           <div>
-            {isLoading && <div>Loading B</div>}
+            {isLoading && <div data-tn="loader-b">Loading B</div>}
             {data && <div data-tn="result-b">{data}</div>}
           </div>
         );
@@ -292,24 +292,24 @@ for (const [testName, createProvider] of Object.entries({
       );
 
       // renders loadings on initial fetching
-      await waitFor(() => expect(screen.queryByText('Loading A')).toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByTestId('loader-a')).toBeInTheDocument());
       expect(screen.queryByTestId('result-a')).not.toBeInTheDocument();
-      await waitFor(() => expect(screen.queryByText('Loading B')).toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByTestId('loader-b')).toBeInTheDocument());
       expect(screen.queryByTestId('result-b')).not.toBeInTheDocument();
 
       // renders data on fetched
-      await waitFor(() => expect(screen.queryByText('Loading A')).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByTestId('loader-a')).not.toBeInTheDocument());
       expect(screen.queryByTestId('result-a')).toHaveTextContent(
         generateResultData(temporaryStorage.params, temporaryStorage.currFetchedData)
       );
-      await waitFor(() => expect(screen.queryByText('Loading B')).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByTestId('loader-a')).not.toBeInTheDocument());
       expect(screen.queryByTestId('result-b')).toHaveTextContent(
         generateResultData(temporaryStorage.params, temporaryStorage.currFetchedData)
       );
 
       // triggers a refetch
       shuffleFetchedData();
-      await userEvent.click(screen.getByText('Refresh data'));
+      await userEvent.click(screen.getByTestId('refresh'));
 
       // renders new data on refetched
       await waitFor(() =>
