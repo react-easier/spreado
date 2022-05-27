@@ -8,4 +8,6 @@ export {getSpreadIn, setSpreadOut} from './global';
 export {SpreadoMobXStore} from './mobx';
 export type {SpreadoMobXState} from './mobx';
 export * from './react';
+export * from './react-query';
 export {createSpreadoReduxPreloadedState, spreadoReduxReducerPack} from './redux';
+export * from './swr';
