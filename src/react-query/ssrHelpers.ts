@@ -1,4 +1,7 @@
-import type {InfiniteData, UseInfiniteQueryResult, UseQueryResult} from 'react-query';
+import {get} from 'lodash';
+import {useMemo} from 'react';
+import {InfiniteData, UseInfiniteQueryResult, useQueries, UseQueryResult} from 'react-query';
+import {getSpreadIn} from '../global';
 
 export type RenderedQueryResult<TData> = Pick<
   UseQueryResult<TData>,
@@ -54,12 +57,6 @@ export function renderQueryResult<TData>(
     status: 'success',
     ...override,
   };
-}
-
-export function renderQueriesResults(
-  paramsList: {data: unknown; override?: OverrideQueryResult<unknown>}[]
-): RenderedQueryResult<unknown>[] {
-  return paramsList.map(({data, override}) => renderQueryResult(data, override));
 }
 
 export type RenderedInfiniteQueryResult<TData> = Pick<
@@ -126,4 +123,8 @@ export function renderInfiniteQueryResult<TData>(
     status: 'success',
     ...override,
   };
+}
+
+export function useQueryInitialData(index: unknown): never {
+  return useMemo(() => get(getSpreadIn(index), 'data'), [index]) as never;
 }

@@ -14,6 +14,7 @@ import useSWR, {SWRConfig} from 'swr';
 import {
   createSpreadoReduxPreloadedState,
   renderQueryResult,
+  renderSwrResponse,
   SpreadoIndexValueMap,
   SpreadoMobXStore,
   spreadoReduxReducerPack,
@@ -24,8 +25,10 @@ import {
   SpreadoSetupProvider,
   useSpreadIn,
   useSpreadOut,
+  getSpreadIn,
+  useQueryInitialData,
+  useSwrFallbackData,
 } from '..';
-import {renderSwrResponse} from '../src';
 
 jest.mock('react', () => {
   const React = jest.requireActual('react');
@@ -247,7 +250,9 @@ for (const [testName, createProvider] of Object.entries({
       function useSomeDataQuerySpreadOut() {
         return useSpreadOut(
           'RR_' + INDEX_OF_SOME_DATA_QUERY,
-          useQuery([INDEX_OF_SOME_DATA_QUERY], () => fetchSomeData())
+          useQuery([INDEX_OF_SOME_DATA_QUERY], () => fetchSomeData(), {
+            initialData: useQueryInitialData('RR_' + INDEX_OF_SOME_DATA_QUERY),
+          })
         );
       }
 
@@ -261,7 +266,9 @@ for (const [testName, createProvider] of Object.entries({
       function useSomeDataFetchSpreadOut() {
         return useSpreadOut(
           'S_' + INDEX_OF_SOME_DATA_QUERY,
-          useSWR([INDEX_OF_SOME_DATA_QUERY], () => fetchSomeData())
+          useSWR([INDEX_OF_SOME_DATA_QUERY], () => fetchSomeData(), {
+            fallbackData: useSwrFallbackData('S_' + INDEX_OF_SOME_DATA_QUERY),
+          })
         );
       }
 
@@ -370,17 +377,15 @@ for (const [testName, createProvider] of Object.entries({
       expect(screen.queryByTestId('loader-b')).not.toBeInTheDocument();
       expect(screen.queryByTestId('result-b')).toHaveTextContent(temporaryStorage.prevResultData);
 
-      // renders loadings on initial fetching
-      await waitFor(() => expect(screen.queryByTestId('loader-a')).toBeInTheDocument());
-      expect(screen.queryByTestId('result-a')).not.toBeInTheDocument();
-      await waitFor(() => expect(screen.queryByTestId('loader-b')).toBeInTheDocument());
-      expect(screen.queryByTestId('result-b')).not.toBeInTheDocument();
-
-      // renders new data on fetched
-      await waitFor(() => expect(screen.queryByTestId('loader-a')).not.toBeInTheDocument());
-      expect(screen.queryByTestId('result-a')).toHaveTextContent(temporaryStorage.currResultData);
-      await waitFor(() => expect(screen.queryByTestId('loader-b')).not.toBeInTheDocument());
-      expect(screen.queryByTestId('result-b')).toHaveTextContent(temporaryStorage.currResultData);
+      // doesn't render loadings on initial fetching but renders new data on fetched
+      await waitFor(() => {
+        expect(screen.queryByTestId('loader-a')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('result-a')).toHaveTextContent(temporaryStorage.currResultData);
+      });
+      await waitFor(() => {
+        expect(screen.queryByTestId('loader-b')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('result-b')).toHaveTextContent(temporaryStorage.currResultData);
+      });
 
       // triggers a refetch
       shuffleResultData();
