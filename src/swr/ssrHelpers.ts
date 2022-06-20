@@ -1,4 +1,7 @@
+import {get} from 'lodash';
+import {useMemo} from 'react';
 import type {SWRResponse} from 'swr';
+import {getSpreadIn} from '../global';
 
 export type RenderedSwrResponse<TData> = Pick<
   SWRResponse<TData>,
@@ -17,4 +20,8 @@ export function renderSwrResponse<TData>(
     isValidating: false,
     ...override,
   };
+}
+
+export function useSwrFallbackData(index: unknown): never {
+  return useMemo(() => get(getSpreadIn(index), 'data'), [index]) as never;
 }

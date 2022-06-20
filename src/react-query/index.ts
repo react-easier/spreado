@@ -1,1 +1,1 @@
-export * from './renderQueryResult';
+export * from './ssrHelpers';

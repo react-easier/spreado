@@ -11,7 +11,7 @@
 
 In a modern React app, it's pretty common to utilize a state managing lib like [Redux](https://github.com/reduxjs/redux) and a data fetching lib like [React Query](https://github.com/tannerlinsley/react-query), but it still takes quite a little work to setup a cross-component shared state or to share a result of data fetching across components.
 
-This module helps easilier share (or spread) things across components in a React app which has utilized a state managing lib and a data fetching lib. It's a group of intuitive encapsulations on existing libs but not another new wheel for a same set of problems.
+This module helps ease sharing (or spreading) things across components in a React app that has utilized a state managing lib and a data fetching lib. It's a group of intuitive encapsulations on existing libs regarding them as peer dependencies, but not another new wheel for a same set of problems. With this idea, making most of plugins or middlewares of the peer dependencies is kept possible. Further more, handling very special cases that are beyond the focus of this module directly with the peer dependencies is kept possible, too.
 
 ## Install
 
@@ -68,6 +68,7 @@ The plain state `isSomethingVisible` is managed by a pair of functions `useIsSom
 Supposing 2 components (`ComponentA` and `ComponentB`) are sharing a result of data fetching which determines their presentational behaviors and gets refetched in one of them:
 
 ```tsx
+import {useQuery} from 'react-query'; // or useSWR from `swr`
 import {useSpreadIn, useSpreadOut} from 'spreado';
 
 const INDEX_OF_SOME_DATA_QUERY = 'INDEX_OF_SOME_DATA_QUERY';
@@ -106,7 +107,7 @@ const ComponentB: FC = () => {
 };
 ```
 
-The snake-case named functions are placeholders. The result of data fetching gets shared by `useSomeDataQuerySpreadOut` and gets re-visited by `useSomeDataQuerySpreadIn`. The fallback value of the shared result is specified by the second param of `useSpreadIn` in case that there is not yet any result fetched. It's worth noting that returns of the 2 functions contain binded helpers of the fetched data. In terms of state managing, the benifit is, again, it's straightforward and avoids boilerplate. In terms of data fetching, the benifit is, it avoids quite amount of work on preparing a same set of fetching params in different components, especially when the params are coupled more or less with presentational logics in any of the components.
+The snake-case named functions are placeholders. The result of data fetching gets shared by `useSomeDataQuerySpreadOut` and gets re-visited by `useSomeDataQuerySpreadIn`. The fallback value of the shared result is specified by the second param of `useSpreadIn` in case that there is not yet any result fetched. Notice that both returns contain the binded helpers for the fetched data, which can help operate the fetched data like refetching later as needed. In terms of state managing, the benifit is, again, it's straightforward and avoids boilerplate. In terms of data fetching, the benifit is, it avoids quite amount of work on preparing a same set of fetching params in different components, especially when the params are coupled more or less with presentational logics in any of the components.
 
 ### Initialization
 
@@ -272,6 +273,114 @@ const App: FC = () => {
   );
 };
 ```
+
+### Sever side rendering (SSR)
+
+SSR process of a modern React app works like this in general:
+
+1. When a http request for a html page hits the server side, the server side prepares data according to the http request, then the data are used to produce the initial global state of the root client side React component to render the html page. Meanwhile, the initial global state is serialized together with the html page.
+2. When a requested html page arrives in the client side, if the client side is a regular browser, the client side deserializes the initial global state and uses it together with the root client side React component to hydrate to initialize the React app. If the client side is a web crawler with JavaScript disabled, the html content remains available at least.
+
+Spreado follows that pattern. In the server side, spreado provides helpers for producing the initial global state. Let's take an example by continuing the usage _Spread a result of data fetching_ and the spreado setup for `redux` and `react-query`:
+
+```tsx
+import React from 'react';
+import {renderToString} from 'react-dom/server';
+import {createStore, combineReducers} from 'redux';
+import {Provider as ReduxProvider} from 'react-redux';
+import {QueryClient, QueryClientProvider} from 'react-query';
+import {
+  SpreadoSetupForReduxReactQuery,
+  SpreadoSetupProvider,
+  spreadoReduxReducerPack,
+  createSpreadoReduxPreloadedState,
+  renderQueryResult,
+} from 'spreado';
+import {INDEX_OF_SOME_DATA_QUERY} from '@/client';
+
+app.get('/some-page', (req, res) => {
+  const someData = prepare_some_data_according_to_the_http_request(req);
+
+  const initialGlobalState = createSpreadoReduxPreloadedState({
+    [INDEX_OF_SOME_DATA_QUERY]: renderQueryResult(someData),
+  });
+
+  const store = createStore(combineReducers(spreadoReduxReducerPack), initialGlobalState);
+  const queryClient = new QueryClient();
+  const spreadoSetup = new SpreadoSetupForReduxReactQuery({store, queryClient});
+
+  const htmlContent = renderToString(
+    <ReduxProvider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <SpreadoSetupProvider setup={spreadoSetup}>
+          <div>...</div>
+        </SpreadoSetupProvider>
+      </QueryClientProvider>
+    </ReduxProvider>
+  );
+
+  res.send(
+    `...
+<script>window.INITIAL_GLOBAL_STATE='${JSON.stringify(initialGlobalState)}';</script>
+<div id="app">${htmlContent}</div>
+    ...`
+  );
+});
+```
+
+The `app.get` is the pseudo code for handling http requests for html pages in the server side, the snake-case named functions are placeholders, and the `...` in `res.send` is the rest required html snippets for a working html page. Then, in the client side, we deserialize the initial global state and hydrate:
+
+```tsx
+import React, {FC} from 'react';
+import {hydrate} from 'react-dom';
+import {createStore, combineReducers} from 'redux';
+import {Provider as ReduxProvider} from 'react-redux';
+import {QueryClient, QueryClientProvider} from 'react-query';
+import {
+  SpreadoSetupForReduxReactQuery,
+  SpreadoSetupProvider,
+  spreadoReduxReducerPack,
+} from 'spreado';
+
+const store = createStore(combineReducers(spreadoReduxReducerPack), JSON.parse(window.INITIAL_GLOBAL_STATE));
+const queryClient = new QueryClient();
+const spreadoSetup = new SpreadoSetupForReduxReactQuery({store, queryClient});
+
+const App: FC = () => {
+  return (
+    <ReduxProvider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <SpreadoSetupProvider setup={spreadoSetup}>
+          <div>...</div>
+        </SpreadoSetupProvider>
+      </QueryClientProvider>
+    </ReduxProvider>
+  );
+};
+
+hydrate(<App>, document.getElementById('app'));
+```
+
+After that, we set the initial data for all the `useQuery` calls of `react-query` (or, set the fallback data for all the `useSWR` calls of `swr`) so to have correct statuses of data fetching in the client side:
+
+```diff
+-import {useSpreadIn, useSpreadOut} from 'spreado';
++import {useSpreadIn, useSpreadOut, useQueryInitialData} from 'spreado';
+
+const INDEX_OF_SOME_DATA_QUERY = 'INDEX_OF_SOME_DATA_QUERY';
+
+function useSomeDataQuerySpreadOut(params: ParamsForSomeDataQuery) {
+  return useSpreadOut(
+    INDEX_OF_SOME_DATA_QUERY,
+-    useQuery([INDEX_OF_SOME_DATA_QUERY, params], () => fetch_some_data_with_params(params))
++    useQuery([INDEX_OF_SOME_DATA_QUERY, params], () => fetch_some_data_with_params(params), {
++      initialData: useQueryInitialData(INDEX_OF_SOME_DATA_QUERY)
++    })
+  );
+}
+```
+
+If the client side is a regualr browser, the page will have a same look as its server side rendered html content at its initial rendering, then it will refetch the latest data immediately afterwards without entering loading states. If the client side is a web crawler with JavaScript disabled, the page just remains its server side rendered html content.
 
 ## API
 
