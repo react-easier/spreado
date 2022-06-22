@@ -40,7 +40,8 @@
     "lint:eslint": "eslint \"src/**/*.@([jt]s?(x)|json)\"",
     "lint:prettier": "prettier --check \"src/**/*.@([jt]s?(x)|json)\"",
     "lint:commitlint": "commitlint --to HEAD",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "contributors": "all-contributors"
   },
   "dependencies": {
     "lodash": "^4"
@@ -84,6 +85,7 @@
     "@types/react-dom": "^16.9.8",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
+    "all-contributors-cli": "^6.20.0",
     "concurrently": "^7.1.0",
     "delay": "^5.0.0",
     "eslint": "^8.13.0",
