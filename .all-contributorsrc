@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "licg9999",
+      "name": "Chungen Li",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8203034?v=4",
+      "profile": "https://github.com/licg9999",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "spreado",
+  "projectOwner": "react-easier",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
