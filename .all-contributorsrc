@@ -12,5 +12,27 @@
   "commit": false,
   "commitConvention": "none",
   "skipCi": true,
-  "contributors": []
+  "contributors": [
+    {
+      "login": "licg9999",
+      "name": "Chungen Li",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8203034?v=4",
+      "profile": "https://github.com/licg9999",
+      "contributions": [
+        "code",
+        "doc",
+        "maintenance",
+        "review"
+      ]
+    },
+    {
+      "login": "linyongping",
+      "name": "Yongping Lin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13087561?v=4",
+      "profile": "https://github.com/linyongping",
+      "contributions": [
+        "code"
+      ]
+    }
+  ]
 }

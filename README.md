@@ -422,3 +422,24 @@ getSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefine
 ```
 
 The `getSpreadIn` is a non-hook version of `useSpreadIn` that reads the spread value by the index. No more difference.
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/licg9999"><img src="https://avatars.githubusercontent.com/u/8203034?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Chungen Li</b></sub></a><br /><a href="https://github.com/react-easier/spreado/commits?author=licg9999" title="Code">💻</a> <a href="https://github.com/react-easier/spreado/commits?author=licg9999" title="Documentation">📖</a> <a href="#maintenance-licg9999" title="Maintenance">🚧</a> <a href="https://github.com/react-easier/spreado/pulls?q=is%3Apr+reviewed-by%3Alicg9999" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/linyongping"><img src="https://avatars.githubusercontent.com/u/13087561?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Yongping Lin</b></sub></a><br /><a href="https://github.com/react-easier/spreado/commits?author=linyongping" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
