@@ -38,7 +38,7 @@
     "lint": "concurrently \"yarn:lint:*\"",
     "lint:tsc": "tsc --noEmit",
     "lint:eslint": "eslint \"src/**/*.@([jt]s?(x)|json)\"",
-    "lint:prettier": "prettier --check \"src/**/*.@([jt]s?(x)|json)\"",
+    "lint:prettier": "prettier --check \"e2e/**/*.@([jt]s?(x)|json)\"",
     "lint:commitlint": "commitlint --to HEAD",
     "prepare": "yarn build",
     "contributors": "all-contributors"
@@ -79,6 +79,7 @@
     "@testing-library/react": "^12.1.5",
     "@testing-library/react-hooks": "^7.0.2",
     "@testing-library/user-event": "^14.2.0",
+    "@trivago/prettier-plugin-sort-imports": "^3.2.0",
     "@types/jest": "^27.4.1",
     "@types/lodash": "^4.14.182",
     "@types/react": "^16.9.56",

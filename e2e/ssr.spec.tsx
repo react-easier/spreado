@@ -11,6 +11,7 @@ import {Provider as ReduxProvider} from 'react-redux';
 import {combineReducers, createStore} from 'redux';
 import resolveCaller from 'resolve/lib/caller';
 import useSWR, {SWRConfig} from 'swr';
+
 import {
   createSpreadoReduxPreloadedState,
   renderQueryResult,
@@ -23,10 +24,9 @@ import {
   SpreadoSetupForReduxReactQuery,
   SpreadoSetupForReduxSwr,
   SpreadoSetupProvider,
+  useQueryInitialData,
   useSpreadIn,
   useSpreadOut,
-  getSpreadIn,
-  useQueryInitialData,
   useSwrFallbackData,
 } from '..';
 
