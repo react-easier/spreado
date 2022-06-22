@@ -8,6 +8,7 @@ import {QueryClient, QueryClientProvider, useQuery} from 'react-query';
 import {Provider as ReduxProvider} from 'react-redux';
 import {combineReducers, createStore} from 'redux';
 import useSWR, {SWRConfig} from 'swr';
+
 import {
   setSpreadOut,
   spreadoReduxReducerPack,
