@@ -1,4 +1,5 @@
 import {useContext} from 'react';
+
 import {ERR_SETUP_NOT_INITED} from '../constants';
 import {SpreadoSetup} from '../core';
 import {SpreadoSetupContext} from './SpreadoSetupProvider';
