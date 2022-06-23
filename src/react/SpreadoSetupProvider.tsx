@@ -1,4 +1,5 @@
 import React, {FC} from 'react';
+
 import {SpreadoSetup} from '../core';
 
 export const SpreadoSetupContext = React.createContext<SpreadoSetup | undefined>(undefined);
