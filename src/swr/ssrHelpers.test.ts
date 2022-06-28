@@ -1,6 +1,7 @@
 import {renderHook} from '@testing-library/react-hooks';
 import {mocked} from 'jest-mock';
 import {uniqueId} from 'lodash';
+
 import {getSpreadIn} from '../global';
 import {renderSwrResponse, useSwrFallbackData} from './ssrHelpers';
 
