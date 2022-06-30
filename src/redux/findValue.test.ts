@@ -1,4 +1,5 @@
 import {uniqueId} from 'lodash';
+
 import {findValueInRootState} from './findValue';
 import {SPREADO_REDUX_STATE_INDEX} from './module';
 

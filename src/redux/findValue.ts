@@ -1,4 +1,5 @@
 import type {DefaultRootState} from 'redux';
+
 import {SPREADO_REDUX_STATE_INDEX} from './module';
 
 function findValueInRootState<T>(rootState: DefaultRootState, key: string): T | undefined;

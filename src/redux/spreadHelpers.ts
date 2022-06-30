@@ -1,6 +1,7 @@
 import {isEqual} from 'lodash';
 import {useEffect, useMemo, useRef} from 'react';
 import type {Store} from 'redux';
+
 import {generateSpreadKey, useRequirePeer} from '../core';
 import {findValueInRootState} from './findValue';
 import {resetSpreadoReduxState, setSpreadoReduxState} from './module';
