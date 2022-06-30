@@ -1,6 +1,7 @@
 import {renderHook} from '@testing-library/react-hooks';
 import {uniqueId} from 'lodash';
 import {Store} from 'redux';
+
 import {getSpreadIn, setSpreadOut, useSpreadIn, useSpreadOut} from '../redux';
 import {SpreadoSetupForReduxSwr} from './SpreadoSetupImpl';
 
