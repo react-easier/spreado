@@ -1,4 +1,5 @@
 import type {QueryClient} from 'react-query';
+
 import {generateSpreadKey, SpreadoSetupBase, SpreadoSetupOptions} from '../core';
 import {
   getSpreadIn,
