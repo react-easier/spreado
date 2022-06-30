@@ -1,15 +1,16 @@
 import {uniqueId} from 'lodash';
+
 import {generateSpreadKey} from '../core';
 import reducer, {
   bulkSetSpreadoReduxState,
   createSpreadoReduxPreloadedState,
-  SpreadoReduxState,
+  resetSpreadoReduxState,
+  setSpreadoReduxState,
   SPREADO_REDUX_ACTION_BULK_SET_STATE,
   SPREADO_REDUX_ACTION_RESET_STATE,
   SPREADO_REDUX_ACTION_SET_STATE,
   SPREADO_REDUX_STATE_INDEX,
-  setSpreadoReduxState,
-  resetSpreadoReduxState,
+  SpreadoReduxState,
 } from './module';
 
 describe('setSpreadoReduxState', () => {
