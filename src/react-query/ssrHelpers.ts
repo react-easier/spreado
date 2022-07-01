@@ -1,6 +1,7 @@
 import {get} from 'lodash';
 import {useMemo} from 'react';
 import {InfiniteData, UseInfiniteQueryResult, UseQueryResult} from 'react-query';
+
 import {getSpreadIn} from '../global';
 
 export type RenderedQueryResult<TData> = Pick<
