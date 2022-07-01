@@ -1,4 +1,5 @@
 import {renderHook} from '@testing-library/react-hooks';
+
 import {peerDeps, requirePeer, useRequirePeer} from './peerDeps';
 
 describe('peerDeps', () => {
