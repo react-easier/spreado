@@ -38,7 +38,7 @@
     "lint": "concurrently \"yarn:lint:*\"",
     "lint:tsc": "tsc --noEmit",
     "lint:eslint": "eslint \"src/**/*.@([jt]s?(x)|json)\"",
-    "lint:prettier": "prettier --check \"e2e/**/*.@([jt]s?(x)|json)\"",
+    "lint:prettier": "prettier --check \"@(src|e2e)/**/*.@([jt]s?(x)|json)\"",
     "lint:commitlint": "commitlint --to HEAD",
     "prepare": "yarn build",
     "contributors": "all-contributors"
