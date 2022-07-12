@@ -1,6 +1,6 @@
-import {generateSpreadKey, requirePeer, SpreadoIndexValueMap} from '../core';
-
-export type SpreadoMobXState = Record<string, unknown>;
+import {requirePeer} from '../core';
+import {createSpreadoMobXPreloadedState} from './ssrHelpers';
+import {SpreadoMobXState} from './types';
 
 export class SpreadoMobXStore {
   state: SpreadoMobXState;
@@ -40,11 +40,5 @@ export class SpreadoMobXStore {
     this.state = {...this.state, ...kvMap};
   }
 
-  static createPreloadedState(ivMap: SpreadoIndexValueMap): SpreadoMobXState {
-    const preloadedState: SpreadoMobXState = Object.keys(ivMap).reduce(
-      (acc, index) => ({...acc, [generateSpreadKey(index)]: ivMap[index]}),
-      {}
-    );
-    return preloadedState;
-  }
+  static createPreloadedState = createSpreadoMobXPreloadedState;
 }

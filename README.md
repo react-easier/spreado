@@ -68,7 +68,9 @@ The plain state `isSomethingVisible` is managed by a pair of functions `useIsSom
 Supposing 2 components (`ComponentA` and `ComponentB`) are sharing a result of data fetching which determines their presentational behaviors and gets refetched in one of them:
 
 ```tsx
-import {useQuery} from 'react-query'; // or useSWR from `swr`
+import {
+  useQuery, // or useSWR from `swr`
+} from 'react-query';
 import {useSpreadIn, useSpreadOut} from 'spreado';
 
 const INDEX_OF_SOME_DATA_QUERY = 'INDEX_OF_SOME_DATA_QUERY';
@@ -117,15 +119,14 @@ Spreado assumes a pair of a state managing lib and a data fetching lib has been 
 
 ```tsx
 // Requires peer dependencies installed: `react`, `redux`, `react-redux`, `react-query`.
-
 import React, {FC} from 'react';
-import {createStore, combineReducers} from 'redux';
-import {Provider as ReduxProvider} from 'react-redux';
 import {QueryClient, QueryClientProvider} from 'react-query';
+import {Provider as ReduxProvider} from 'react-redux';
+import {combineReducers, createStore} from 'redux';
 import {
+  spreadoReduxReducerPack,
   SpreadoSetupForReduxReactQuery,
   SpreadoSetupProvider,
-  spreadoReduxReducerPack,
 } from 'spreado';
 
 const store = createStore(combineReducers(spreadoReduxReducerPack));
@@ -149,15 +150,14 @@ const App: FC = () => {
 
 ```tsx
 // Requires peer dependencies installed: `react`, `@reduxjs/toolkit`, `react-redux`, `react-query`.
-
-import React, {FC} from 'react';
 import {configureStore} from '@reduxjs/toolkit';
-import {Provider as ReduxProvider} from 'react-redux';
+import React, {FC} from 'react';
 import {QueryClient, QueryClientProvider} from 'react-query';
+import {Provider as ReduxProvider} from 'react-redux';
 import {
+  spreadoReduxReducerPack,
   SpreadoSetupForReduxReactQuery,
   SpreadoSetupProvider,
-  spreadoReduxReducerPack,
 } from 'spreado';
 
 const store = configureStore({
@@ -184,11 +184,10 @@ const App: FC = () => {
 
 ```tsx
 // Requires peer dependencies installed: `react`, `redux`, `react-redux`, `swr`.
-
 import React, {FC} from 'react';
-import {createStore, combineReducers} from 'redux';
 import {Provider as ReduxProvider} from 'react-redux';
-import {SpreadoSetupForReduxSwr, SpreadoSetupProvider, spreadoReduxReducerPack} from 'spreado';
+import {combineReducers, createStore} from 'redux';
+import {spreadoReduxReducerPack, SpreadoSetupForReduxSwr, SpreadoSetupProvider} from 'spreado';
 
 const store = createStore(combineReducers(spreadoReduxReducerPack));
 const spreadoSetup = new SpreadoSetupForReduxSwr({store});
@@ -208,11 +207,10 @@ const App: FC = () => {
 
 ```tsx
 // Requires peer dependencies installed: `react`, `@reduxjs/toolkit`, `react-redux`, `swr`.
-
-import React, {FC} from 'react';
 import {configureStore} from '@reduxjs/toolkit';
+import React, {FC} from 'react';
 import {Provider as ReduxProvider} from 'react-redux';
-import {SpreadoSetupForReduxSwr, SpreadoSetupProvider, spreadoReduxReducerPack} from 'spreado';
+import {spreadoReduxReducerPack, SpreadoSetupForReduxSwr, SpreadoSetupProvider} from 'spreado';
 
 const store = configureStore({
   reducer: spreadoReduxReducerPack,
@@ -235,7 +233,6 @@ const App: FC = () => {
 
 ```tsx
 // Requires peer dependencies installed: `react`, `mobx`, `react-query`.
-
 import React, {FC} from 'react';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {SpreadoSetupForMobXReactQuery, SpreadoSetupProvider} from 'spreado';
@@ -258,10 +255,9 @@ const App: FC = () => {
 
 ```tsx
 // Requires peer dependencies installed: `react`, `mobx`, `swr`.
-
 import React, {FC} from 'react';
-import {SWRConfig} from 'swr';
 import {SpreadoSetupForMobXSwr, SpreadoSetupProvider} from 'spreado';
+import {SWRConfig} from 'swr';
 
 const spreadoSetup = new SpreadoSetupForMobXSwr();
 
@@ -274,6 +270,8 @@ const App: FC = () => {
 };
 ```
 
+Notice that constructors `SpreadoSetupForMobX...` optionally accept a param `store` that can get instantiated by `new SpreadoMobXStore()`. If the `store` is give, constructors `SpreadoSetupForMobX...` will use it. Otherwise, they will create one internally.
+
 ### Sever side rendering (SSR)
 
 SSR process of a modern React app works like this in general:
@@ -281,22 +279,22 @@ SSR process of a modern React app works like this in general:
 1. When a http request for a html page hits the server side, the server side prepares data according to the http request, then the data are used to produce the initial global state of the root client side React component to render the html page. Meanwhile, the initial global state is serialized together with the html page.
 2. When a requested html page arrives in the client side, if the client side is a regular browser, the client side deserializes the initial global state and uses it together with the root client side React component to hydrate to initialize the React app. If the client side is a web crawler with JavaScript disabled, the html content remains available at least.
 
-Spreado follows that pattern. In the server side, spreado provides helpers for producing the initial global state. Let's take an example by continuing the usage _Spread a result of data fetching_ and the spreado setup for `redux` and `react-query`:
+Spreado follows that pattern. In the server side, spreado provides helpers for producing the initial global state. Let's take an example by continuing the usage section _Spread a result of data fetching_ and the spreado setup for `redux` and `react-query`:
 
 ```tsx
+import {INDEX_OF_SOME_DATA_QUERY} from '@/client';
 import React from 'react';
 import {renderToString} from 'react-dom/server';
-import {createStore, combineReducers} from 'redux';
-import {Provider as ReduxProvider} from 'react-redux';
 import {QueryClient, QueryClientProvider} from 'react-query';
+import {Provider as ReduxProvider} from 'react-redux';
+import {combineReducers, createStore} from 'redux';
 import {
-  SpreadoSetupForReduxReactQuery,
-  SpreadoSetupProvider,
-  spreadoReduxReducerPack,
   createSpreadoReduxPreloadedState,
   renderQueryResult,
+  spreadoReduxReducerPack,
+  SpreadoSetupForReduxReactQuery,
+  SpreadoSetupProvider,
 } from 'spreado';
-import {INDEX_OF_SOME_DATA_QUERY} from '@/client';
 
 app.get('/some-page', (req, res) => {
   const someData = prepare_some_data_according_to_the_http_request(req);
@@ -333,16 +331,19 @@ The `app.get` is the pseudo code for handling http requests for html pages in th
 ```tsx
 import React, {FC} from 'react';
 import {hydrate} from 'react-dom';
-import {createStore, combineReducers} from 'redux';
-import {Provider as ReduxProvider} from 'react-redux';
 import {QueryClient, QueryClientProvider} from 'react-query';
+import {Provider as ReduxProvider} from 'react-redux';
+import {combineReducers, createStore} from 'redux';
 import {
+  spreadoReduxReducerPack,
   SpreadoSetupForReduxReactQuery,
   SpreadoSetupProvider,
-  spreadoReduxReducerPack,
 } from 'spreado';
 
-const store = createStore(combineReducers(spreadoReduxReducerPack), JSON.parse(window.INITIAL_GLOBAL_STATE));
+const store = createStore(
+  combineReducers(spreadoReduxReducerPack),
+  JSON.parse(window.INITIAL_GLOBAL_STATE)
+);
 const queryClient = new QueryClient();
 const spreadoSetup = new SpreadoSetupForReduxReactQuery({store, queryClient});
 
@@ -361,7 +362,7 @@ const App: FC = () => {
 hydrate(<App>, document.getElementById('app'));
 ```
 
-After that, we set the initial data for all the `useQuery` calls of `react-query` (or, set the fallback data for all the `useSWR` calls of `swr`) so to have correct statuses of data fetching in the client side:
+After that, we set the initial data for all the `useQuery` calls of `react-query` so to have correct statuses of data fetching in the client side:
 
 ```diff
 -import {useSpreadIn, useSpreadOut} from 'spreado';
@@ -382,9 +383,18 @@ function useSomeDataQuerySpreadOut(params: ParamsForSomeDataQuery) {
 
 If the client side is a regualr browser, the page will have a same look as its server side rendered html content at its initial rendering, then it will refetch the latest data immediately afterwards without entering loading states. If the client side is a web crawler with JavaScript disabled, the page just remains its server side rendered html content.
 
+In case of using `swr`, similarly, you can prepare the `store` by `SpreadoMobXStore`, `createSpreadoMobXPreloadedState`, `renderSwrResponse` and set the fallback data for all the `useSWR` calls by `useSwrFallbackData`.
+
+For more details on available SSR helpers, see also:
+
+- [src/react-query/ssrHelpers](https://github.com/react-easier/spreado/blob/main/src/react-query/ssrHelpers.ts)
+- [src/swr/ssrHelpers](https://github.com/react-easier/spreado/blob/main/src/swr/ssrHelpers.ts)
+- [src/redux/ssrHelpers](https://github.com/react-easier/spreado/blob/main/src/redux/ssrHelpers.ts)
+- [src/mobx/ssrHelpers](https://github.com/react-easier/spreado/blob/main/src/mobx/ssrHelpers.ts)
+
 ## API
 
-Only typical usages are described above. Please explore more usages by refering to APIs below to fit your use cases.
+Here are full descriptions for core APIs of spreado. Please have a look as needed:
 
 ### useSpreadOut
 

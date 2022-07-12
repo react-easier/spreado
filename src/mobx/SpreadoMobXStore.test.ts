@@ -2,8 +2,8 @@ import {waitFor} from '@testing-library/react';
 import {pick, uniqueId} from 'lodash';
 import {autorun} from 'mobx';
 
-import {generateSpreadKey} from '../core';
-import {SpreadoMobXState, SpreadoMobXStore} from './SpreadoMobXStore';
+import {SpreadoMobXStore} from './SpreadoMobXStore';
+import {SpreadoMobXState} from './types';
 
 describe('SpreadoMobXStore', () => {
   let store!: SpreadoMobXStore;
@@ -64,20 +64,6 @@ describe('SpreadoMobXStore', () => {
       const kvMap = {[k1]: uniqueId(), [k2]: uniqueId()};
       store.bulkSetState(kvMap);
       await waitFor(() => expect(pick(storedState, k1, k2)).toEqual(kvMap));
-    });
-  });
-
-  describe('.createPreloadedState', () => {
-    test('generates preloaded state for mobx store', () => {
-      const key1 = uniqueId();
-      const value1 = uniqueId();
-      const key2 = uniqueId();
-      const value2 = uniqueId();
-      const kvMap = {[key1]: value1, [key2]: value2};
-      expect(SpreadoMobXStore.createPreloadedState(kvMap)).toEqual({
-        [generateSpreadKey(key1)]: value1,
-        [generateSpreadKey(key2)]: value2,
-      });
     });
   });
 });
