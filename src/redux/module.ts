@@ -1,7 +1,5 @@
 import type {AnyAction, Reducer} from 'redux';
 
-import {generateSpreadKey, SpreadoIndexValueMap} from '../core';
-
 export const SPREADO_REDUX_ACTION_SET_STATE = 'SPREADO_REDUX_ACTION_SET_STATE';
 export const SPREADO_REDUX_ACTION_RESET_STATE = 'SPREADO_REDUX_ACTION_RESET_STATE';
 export const SPREADO_REDUX_ACTION_BULK_SET_STATE = 'SPREADO_REDUX_ACTION_BULK_SET_STATE';
@@ -76,17 +74,3 @@ declare module 'react-redux' {
 export const spreadoReduxReducerPack = {
   [SPREADO_REDUX_STATE_INDEX]: reducer as Reducer<SpreadoReduxState, AnyAction>,
 };
-
-export interface SpreadoReduxPreloadedState {
-  [SPREADO_REDUX_STATE_INDEX]: SpreadoReduxState;
-}
-
-export function createSpreadoReduxPreloadedState(
-  ivMap: SpreadoIndexValueMap
-): SpreadoReduxPreloadedState {
-  const preloadedState: SpreadoReduxState = Object.keys(ivMap).reduce(
-    (acc, index) => ({...acc, [generateSpreadKey(index)]: ivMap[index]}),
-    {}
-  );
-  return {[SPREADO_REDUX_STATE_INDEX]: preloadedState};
-}

@@ -13,6 +13,7 @@ import resolveCaller from 'resolve/lib/caller';
 import useSWR, {SWRConfig} from 'swr';
 
 import {
+  createSpreadoMobXPreloadedState,
   createSpreadoReduxPreloadedState,
   renderQueryResult,
   renderSwrResponse,
@@ -123,7 +124,7 @@ for (const [testName, createProvider] of Object.entries({
     return Provider;
   },
   'mobx, react-query': (ivMap: SpreadoIndexValueMap) => {
-    const store = new SpreadoMobXStore(SpreadoMobXStore.createPreloadedState(ivMap));
+    const store = new SpreadoMobXStore(createSpreadoMobXPreloadedState(ivMap));
     const queryClient = new QueryClient();
     const spreadoSetup = new SpreadoSetupForMobXReactQuery({store, queryClient});
     const Provider: FC = ({children}) => {
@@ -138,7 +139,7 @@ for (const [testName, createProvider] of Object.entries({
     return Provider;
   },
   'mobx, swr': (ivMap: SpreadoIndexValueMap) => {
-    const store = new SpreadoMobXStore(SpreadoMobXStore.createPreloadedState(ivMap));
+    const store = new SpreadoMobXStore(createSpreadoMobXPreloadedState(ivMap));
     const spreadoSetup = new SpreadoSetupForMobXSwr({store});
     const Provider: FC = ({children}) => {
       return (

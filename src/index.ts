@@ -5,7 +5,7 @@ export * from './for-mobx-swr';
 export * from './for-redux-react-query';
 export * from './for-redux-swr';
 export {getSpreadIn, setSpreadOut} from './global';
-export {SpreadoMobXStore} from './mobx';
+export {createSpreadoMobXPreloadedState, SpreadoMobXStore} from './mobx';
 export type {SpreadoMobXState} from './mobx';
 export * from './react';
 export * from './react-query';
