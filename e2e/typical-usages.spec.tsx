@@ -9,17 +9,11 @@ import {Provider as ReduxProvider} from 'react-redux';
 import {combineReducers, createStore} from 'redux';
 import useSWR, {SWRConfig} from 'swr';
 
-import {
-  setSpreadOut,
-  spreadoReduxReducerPack,
-  SpreadoSetupForMobXReactQuery,
-  SpreadoSetupForMobXSwr,
-  SpreadoSetupForReduxReactQuery,
-  SpreadoSetupForReduxSwr,
-  SpreadoSetupProvider,
-  useSpreadIn,
-  useSpreadOut,
-} from '..';
+import {setSpreadOut, SpreadoSetupProvider, useSpreadIn, useSpreadOut} from '..';
+import {SpreadoSetupForMobXReactQuery} from '../for-mobx-react-query';
+import {SpreadoSetupForMobXSwr} from '../for-mobx-swr';
+import {spreadoReduxReducerPack, SpreadoSetupForReduxReactQuery} from '../for-redux-react-query';
+import {SpreadoSetupForReduxSwr} from '../for-redux-swr';
 
 for (const [testName, createProvider] of Object.entries({
   'redux, react-query': () => {

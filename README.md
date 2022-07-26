@@ -123,11 +123,11 @@ import React, {FC} from 'react';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {Provider as ReduxProvider} from 'react-redux';
 import {combineReducers, createStore} from 'redux';
+import {SpreadoSetupProvider} from 'spreado';
 import {
   spreadoReduxReducerPack,
   SpreadoSetupForReduxReactQuery,
-  SpreadoSetupProvider,
-} from 'spreado';
+} from 'spreado/for-redux-react-query';
 
 const store = createStore(combineReducers(spreadoReduxReducerPack));
 const queryClient = new QueryClient();
@@ -154,11 +154,11 @@ import {configureStore} from '@reduxjs/toolkit';
 import React, {FC} from 'react';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {Provider as ReduxProvider} from 'react-redux';
+import {SpreadoSetupProvider} from 'spreado';
 import {
   spreadoReduxReducerPack,
   SpreadoSetupForReduxReactQuery,
-  SpreadoSetupProvider,
-} from 'spreado';
+} from 'spreado/for-redux-react-query';
 
 const store = configureStore({
   reducer: spreadoReduxReducerPack,
@@ -187,7 +187,8 @@ const App: FC = () => {
 import React, {FC} from 'react';
 import {Provider as ReduxProvider} from 'react-redux';
 import {combineReducers, createStore} from 'redux';
-import {spreadoReduxReducerPack, SpreadoSetupForReduxSwr, SpreadoSetupProvider} from 'spreado';
+import {SpreadoSetupProvider} from 'spreado';
+import {spreadoReduxReducerPack, SpreadoSetupForReduxSwr} from 'spreado/for-redux-swr';
 
 const store = createStore(combineReducers(spreadoReduxReducerPack));
 const spreadoSetup = new SpreadoSetupForReduxSwr({store});
@@ -210,7 +211,8 @@ const App: FC = () => {
 import {configureStore} from '@reduxjs/toolkit';
 import React, {FC} from 'react';
 import {Provider as ReduxProvider} from 'react-redux';
-import {spreadoReduxReducerPack, SpreadoSetupForReduxSwr, SpreadoSetupProvider} from 'spreado';
+import {SpreadoSetupProvider} from 'spreado';
+import {spreadoReduxReducerPack, SpreadoSetupForReduxSwr} from 'spreado/for-redux-swr';
 
 const store = configureStore({
   reducer: spreadoReduxReducerPack,
@@ -235,7 +237,8 @@ const App: FC = () => {
 // Requires peer dependencies installed: `react`, `mobx`, `react-query`.
 import React, {FC} from 'react';
 import {QueryClient, QueryClientProvider} from 'react-query';
-import {SpreadoSetupForMobXReactQuery, SpreadoSetupProvider} from 'spreado';
+import {SpreadoSetupProvider} from 'spreado';
+import {SpreadoSetupForMobXReactQuery} from 'spreado/for-mobx-react-query';
 
 const queryClient = new QueryClient();
 const spreadoSetup = new SpreadoSetupForMobXReactQuery({queryClient});
@@ -256,7 +259,8 @@ const App: FC = () => {
 ```tsx
 // Requires peer dependencies installed: `react`, `mobx`, `swr`.
 import React, {FC} from 'react';
-import {SpreadoSetupForMobXSwr, SpreadoSetupProvider} from 'spreado';
+import {SpreadoSetupProvider} from 'spreado';
+import {SpreadoSetupForMobXSwr} from 'spreado/for-mobx-swr';
 import {SWRConfig} from 'swr';
 
 const spreadoSetup = new SpreadoSetupForMobXSwr();
@@ -288,13 +292,13 @@ import {renderToString} from 'react-dom/server';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {Provider as ReduxProvider} from 'react-redux';
 import {combineReducers, createStore} from 'redux';
+import {SpreadoSetupProvider} from 'spreado';
 import {
   createSpreadoReduxPreloadedState,
   renderQueryResult,
   spreadoReduxReducerPack,
   SpreadoSetupForReduxReactQuery,
-  SpreadoSetupProvider,
-} from 'spreado';
+} from 'spreado/for-redux-react-query';
 
 app.get('/some-page', (req, res) => {
   const someData = prepare_some_data_according_to_the_http_request(req);
@@ -334,11 +338,8 @@ import {hydrate} from 'react-dom';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {Provider as ReduxProvider} from 'react-redux';
 import {combineReducers, createStore} from 'redux';
-import {
-  spreadoReduxReducerPack,
-  SpreadoSetupForReduxReactQuery,
-  SpreadoSetupProvider,
-} from 'spreado';
+import {SpreadoSetupProvider} from 'spreado';
+import {spreadoReduxReducerPack, SpreadoSetupForReduxReactQuery} from 'spreado/redux-react-query';
 
 const store = createStore(
   combineReducers(spreadoReduxReducerPack),
@@ -365,8 +366,8 @@ hydrate(<App>, document.getElementById('app'));
 After that, we set the initial data for all the `useQuery` calls of `react-query` so to have correct statuses of data fetching in the client side:
 
 ```diff
--import {useSpreadIn, useSpreadOut} from 'spreado';
-+import {useSpreadIn, useSpreadOut, useQueryInitialData} from 'spreado';
+import {useSpreadIn, useSpreadOut} from 'spreado';
++import {useQueryInitialData} from 'spreado/for-redux-react-query';
 
 const INDEX_OF_SOME_DATA_QUERY = 'INDEX_OF_SOME_DATA_QUERY';
 

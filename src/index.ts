@@ -1,13 +1,4 @@
 export {generateSpreadKey, SpreadoSetupBase} from './core';
 export type {SpreadoIndexValueMap, SpreadoSetup, SpreadoSetupOptions} from './core';
-export * from './for-mobx-react-query';
-export * from './for-mobx-swr';
-export * from './for-redux-react-query';
-export * from './for-redux-swr';
 export {getSpreadIn, setSpreadOut} from './global';
-export {createSpreadoMobXPreloadedState, SpreadoMobXStore} from './mobx';
-export type {SpreadoMobXState} from './mobx';
 export * from './react';
-export * from './react-query';
-export {createSpreadoReduxPreloadedState, spreadoReduxReducerPack} from './redux';
-export * from './swr';

@@ -1,6 +1,6 @@
 import {get} from 'lodash';
 import {useMemo} from 'react';
-import type {SWRResponse} from 'swr';
+import {SWRResponse} from 'swr';
 
 import {getSpreadIn} from '../global';
 
