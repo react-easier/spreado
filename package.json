@@ -22,7 +22,9 @@
   },
   "main": "lib/index.js",
   "files": [
-    "lib"
+    "lib",
+    "src",
+    "for-*"
   ],
   "scripts": {
     "build": "tsc --project configs/tsconfig.prod.json",
