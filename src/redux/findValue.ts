@@ -1,4 +1,4 @@
-import type {DefaultRootState} from 'redux';
+import {DefaultRootState} from 'redux';
 
 import {SPREADO_REDUX_STATE_INDEX} from './module';
 

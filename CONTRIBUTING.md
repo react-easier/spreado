@@ -44,7 +44,7 @@ Often, you may keep `yarn watch` running to do compilation and type checking con
 ```sh
 src
 ├── core            # Core interfaces and helpers.
-├── for-*           # Implementations of SpreadoSetup exported for setup initialization.
+├── for-*           # Implementations of SpreadoSetup and implementation-specific exports.
 ├── redux/mobx/...  # Internal helpers grouped by themes.
 ├── react           # Hooks and components exported for react specific usages.
 └── global.ts       # Utils exported for plain function calls.

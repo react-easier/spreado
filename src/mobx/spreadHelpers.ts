@@ -1,7 +1,8 @@
 import {isEqual} from 'lodash';
+import {reaction} from 'mobx';
 import {useEffect, useMemo, useRef, useState} from 'react';
 
-import {generateSpreadKey, useRequirePeer} from '../core';
+import {generateSpreadKey} from '../core';
 import {SpreadoMobXStore} from './SpreadoMobXStore';
 
 export function useSpreadOut<T>(
@@ -10,7 +11,6 @@ export function useSpreadOut<T>(
   index: unknown,
   value: T
 ): T {
-  const {reaction} = useRequirePeer('mobx');
   const key = useMemo(() => generateSpreadKey(index), [index]);
 
   const [foundValue, setFoundValue] = useState(() => store.findValue<T>(key));
@@ -42,7 +42,7 @@ export function useSpreadOut<T>(
       },
       {fireImmediately: true}
     );
-  }, [reaction, key, store]);
+  }, [key, store]);
 
   return foundValue ?? value;
 }
@@ -52,7 +52,6 @@ export function useSpreadIn<T>(
   index: unknown,
   fallback?: Partial<T>
 ): T | Partial<T> | undefined {
-  const {reaction} = useRequirePeer('mobx');
   const key = useMemo(() => generateSpreadKey(index), [index]);
 
   const [foundValue, setFoundValue] = useState(() => store.findValue<T>(key, fallback));
@@ -74,7 +73,7 @@ export function useSpreadIn<T>(
       },
       {fireImmediately: true}
     );
-  }, [reaction, key, store]);
+  }, [key, store]);
 
   return foundValue;
 }

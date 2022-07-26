@@ -12,24 +12,21 @@ import {combineReducers, createStore} from 'redux';
 import resolveCaller from 'resolve/lib/caller';
 import useSWR, {SWRConfig} from 'swr';
 
+import {SpreadoIndexValueMap, SpreadoSetupProvider, useSpreadIn, useSpreadOut} from '..';
 import {
   createSpreadoMobXPreloadedState,
-  createSpreadoReduxPreloadedState,
   renderQueryResult,
-  renderSwrResponse,
-  SpreadoIndexValueMap,
   SpreadoMobXStore,
-  spreadoReduxReducerPack,
   SpreadoSetupForMobXReactQuery,
-  SpreadoSetupForMobXSwr,
-  SpreadoSetupForReduxReactQuery,
-  SpreadoSetupForReduxSwr,
-  SpreadoSetupProvider,
   useQueryInitialData,
-  useSpreadIn,
-  useSpreadOut,
-  useSwrFallbackData,
-} from '..';
+} from '../for-mobx-react-query';
+import {renderSwrResponse, SpreadoSetupForMobXSwr, useSwrFallbackData} from '../for-mobx-swr';
+import {
+  createSpreadoReduxPreloadedState,
+  spreadoReduxReducerPack,
+  SpreadoSetupForReduxReactQuery,
+} from '../for-redux-react-query';
+import {SpreadoSetupForReduxSwr} from '../for-redux-swr';
 
 jest.mock('react', () => {
   const React = jest.requireActual('react');

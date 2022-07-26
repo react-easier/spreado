@@ -1,5 +1,5 @@
-import type {QueryClient} from 'react-query';
-import type {Store} from 'redux';
+import {QueryClient} from 'react-query';
+import {Store} from 'redux';
 
 import {generateSpreadKey, SpreadoSetupBase, SpreadoSetupOptions} from '../core';
 import {

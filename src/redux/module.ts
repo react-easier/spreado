@@ -1,4 +1,4 @@
-import type {AnyAction, Reducer} from 'redux';
+import {AnyAction, Reducer} from 'redux';
 
 export const SPREADO_REDUX_ACTION_SET_STATE = 'SPREADO_REDUX_ACTION_SET_STATE';
 export const SPREADO_REDUX_ACTION_RESET_STATE = 'SPREADO_REDUX_ACTION_RESET_STATE';

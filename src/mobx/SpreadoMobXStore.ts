@@ -1,4 +1,5 @@
-import {requirePeer} from '../core';
+import {action, makeObservable, observable} from 'mobx';
+
 import {createSpreadoMobXPreloadedState} from './ssrHelpers';
 import {SpreadoMobXState} from './types';
 
@@ -6,7 +7,6 @@ export class SpreadoMobXStore {
   state: SpreadoMobXState;
 
   constructor(preloadedState: SpreadoMobXState = {}) {
-    const {action, makeObservable, observable} = requirePeer('mobx');
     this.state = preloadedState;
     makeObservable(this, {
       state: observable.ref,
