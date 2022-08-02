@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, ReactNode} from 'react';
 
 import {SpreadoSetup} from '../core';
 
@@ -6,6 +6,7 @@ export const SpreadoSetupContext = React.createContext<SpreadoSetup | undefined>
 
 export type SpreadoProviderProps = {
   setup: SpreadoSetup;
+  children?: ReactNode;
 };
 
 export const SpreadoSetupProvider: FC<SpreadoProviderProps> = ({setup, children}) => {
