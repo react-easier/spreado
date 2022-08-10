@@ -17,7 +17,6 @@ export function renderSwrResponse<TData>(
 ): RenderedSwrResponse<TData> {
   return {
     data,
-    error: undefined,
     isValidating: false,
     ...override,
   };
