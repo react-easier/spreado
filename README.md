@@ -5,13 +5,13 @@
 [![](https://img.shields.io/github/license/react-easier/spreado)](https://github.com/react-easier/spreado/blob/main/LICENSE)
 [![](https://img.shields.io/badge/semantic--release-conventional-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 
-> Easier to spread things across components in a React app
+> Easier to spread things across React components
 
 ## Why
 
-In a modern React app, it's pretty common to utilize a state managing lib like [Redux](https://github.com/reduxjs/redux) and a data fetching lib like [React Query](https://github.com/tannerlinsley/react-query), but it still takes quite a little work to setup a cross-component shared state or to share a result of data fetching across components.
+Sharing states and data across React components is pretty common, which could usually be achieved by utilizing a state managing lib like [Redux](https://github.com/reduxjs/redux). The usages of today's top state managing libs are cool, but only in terms of resolving the sharing issue, they could feel tedious because of concepts to learn and boilerplates to write. In addition, when it comes to data, a data fetching lib like [React Query](https://github.com/tannerlinsley/react-query) might always be utilized. As a result, sharing data becomes sharing the data fetching result of the data fetching lib, which makes the sharing rather tedious even if the SSR problem has not yet been taken care of.
 
-This module helps ease sharing (or spreading) things across components in a React app that has utilized a state managing lib and a data fetching lib. It's a group of intuitive encapsulations on existing libs regarding them as peer dependencies, but not another new wheel for a same set of problems. With this idea, making most of plugins or middlewares of the peer dependencies is kept possible. Further more, handling very special cases that are beyond the focus of this module directly with the peer dependencies is kept possible, too.
+By this module, we are providing a set of intuitive encapsulations regarding well-known state managing libs and well-known data fetching libs as peer dependencies, to introduce a new way to resolve the sharing issue easily, while keeping the old way still available for the rest parts of the state managing problem and the data fetching problem.
 
 ## Install
 
@@ -23,7 +23,7 @@ npm install spreado
 
 ### Spread a plain state
 
-Assuming 2 components (`ComponentA` and `ComponentB`) are sharing a boolean state which controls their certain parts and gets updated in one of them:
+Assuming 2 components (`ComponentA` and `ComponentB`) are sharing a boolean state which controls their parts simultaneously and gets updated in one of them:
 
 ```tsx
 import {setSpreadOut, useSpreadIn} from 'spreado';
@@ -61,11 +61,11 @@ const ComponentB: FC = () => {
 };
 ```
 
-The plain state `isSomethingVisible` is managed by a pair of functions `useIsSomethingVisible` and `setIsSomethingVisible` which read and write its value. The default value is specified by the second param of `useSpreadIn`. The benifit is, it's straightforward and avoids boilerplate.
+The plain state `isSomethingVisible` is managed by the pair of functions `useIsSomethingVisible` and `setIsSomethingVisible` which read and write the value. The default value is specified by the second param of `useSpreadIn`. The benifit is, it's straightforward and avoids boilerplates.
 
 ### Spread a result of data fetching
 
-Supposing 2 components (`ComponentA` and `ComponentB`) are sharing a result of data fetching which determines their presentational behaviors and gets refetched in one of them:
+Supposing 2 components (`ComponentA` and `ComponentB`) are sharing a result of data fetching which gets rendered in both of them and gets refetched in one of them:
 
 ```tsx
 import {
@@ -109,7 +109,7 @@ const ComponentB: FC = () => {
 };
 ```
 
-The snake-case named functions are placeholders. The result of data fetching gets shared by `useSomeDataQuerySpreadOut` and gets re-visited by `useSomeDataQuerySpreadIn`. The fallback value of the shared result is specified by the second param of `useSpreadIn` in case that there is not yet any result fetched. Notice that both returns contain the binded helpers for the fetched data, which can help operate the fetched data like refetching later as needed. In terms of state managing, the benifit is, again, it's straightforward and avoids boilerplate. In terms of data fetching, the benifit is, it avoids quite amount of work on preparing a same set of fetching params in different components, especially when the params are coupled more or less with presentational logics in any of the components.
+The snake-case named functions are placeholders. The result of data fetching gets shared by `useSomeDataQuerySpreadOut` and gets re-visited by `useSomeDataQuerySpreadIn`. The fallback value of the shared result is specified by the second param of `useSpreadIn` in case that there is not yet any result fetched. Notice that both returns contain the binded helpers for the fetched data, which can help operate the fetched data like refetching later as needed. In terms of state managing, the benifit is, again, it's straightforward and avoids boilerplates. In terms of data fetching, the benifit is, it avoids quite amount of work on preparing a same set of fetching params in different components, especially when the params are coupled more or less with presentational logics in any of the components.
 
 ### Initialization
 
@@ -384,7 +384,7 @@ function useSomeDataQuerySpreadOut(params: ParamsForSomeDataQuery) {
 
 If the client side is a regualr browser, the page will have a same look as its server side rendered html content at its initial rendering, then it will refetch the latest data immediately afterwards without entering loading states. If the client side is a web crawler with JavaScript disabled, the page just remains its server side rendered html content.
 
-In case of using `swr`, similarly, you can prepare the `store` by `SpreadoMobXStore`, `createSpreadoMobXPreloadedState`, `renderSwrResponse` and set the fallback data for all the `useSWR` calls by `useSwrFallbackData`.
+In case of using `mobx` and `swr`, similarly, you can prepare the `store` by `SpreadoMobXStore`, `createSpreadoMobXPreloadedState`, `renderSwrResponse` and set the fallback data for all the `useSWR` calls by `useSwrFallbackData`.
 
 For more details on available SSR helpers, see also:
 
