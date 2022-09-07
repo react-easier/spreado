@@ -1,7 +1,7 @@
 {
   "name": "spreado",
   "version": "1.0.0-semantic-release",
-  "description": "Easier to spread things across components in a React app",
+  "description": "Easier to spread things across React components",
   "keywords": [
     "react",
     "redux",
