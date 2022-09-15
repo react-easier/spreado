@@ -10,7 +10,9 @@
     "react-query",
     "swr",
     "spreado",
-    "react-easier"
+    "react-easier",
+    "share",
+    "spread"
   ],
   "author": "licg <licg9999@126.com>",
   "license": "MIT",

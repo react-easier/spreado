@@ -9,9 +9,9 @@
 
 ## Why
 
-Sharing states and data across React components is pretty common, which could usually be achieved by utilizing a state managing lib like [Redux](https://github.com/reduxjs/redux). The usages of today's top state managing libs are cool, but only in terms of resolving the sharing issue, they could feel tedious because of concepts to learn and boilerplates to write. In addition, when it comes to data, a data fetching lib like [React Query](https://github.com/tannerlinsley/react-query) might always be utilized. As a result, sharing data becomes sharing the data fetching result of the data fetching lib, which makes the sharing rather tedious even if the SSR problem has not yet been taken care of.
+It's common to use a combination of a state managing lib (like [Redux](https://github.com/reduxjs/redux)) and a data fetching lib (like [React Query](https://github.com/tannerlinsley/react-query)) in the development of a React app. But spreading a data fetching result from a React component to another is tedious. The work involves mapping the data fetching result to a timely-updated redux state so to share the access beyond the current React component.
 
-By this module, we are providing a set of intuitive encapsulations regarding well-known state managing libs and well-known data fetching libs as peer dependencies, to introduce a new way to resolve the sharing issue easily, while keeping the old way still available for the rest parts of the state managing problem and the data fetching problem.
+Spreado provides a set of intuitive APIs to simplify that kind of tedious work for you, making spreading things easily across React components. The combinations of well-known state managing libs and data fetching libs are supported and those supported libs are only regarded as peer dependencies. The bonus is, any usages of peer dependencies are kept still available.
 
 ## Install
 
@@ -21,51 +21,9 @@ npm install spreado
 
 ## Usage
 
-### Spread a plain state
-
-Assuming 2 components (`ComponentA` and `ComponentB`) are sharing a boolean state which controls their parts simultaneously and gets updated in one of them:
-
-```tsx
-import {setSpreadOut, useSpreadIn} from 'spreado';
-
-const INDEX_OF_IS_SOMETHING_VISIBLE = 'INDEX_OF_IS_SOMETHING_VISIBLE';
-
-function useIsSomethingVisible() {
-  return useSpreadIn<boolean>(INDEX_OF_IS_SOMETHING_VISIBLE, false);
-}
-
-function setIsSomethingVisible(v: boolean) {
-  return setSpreadOut(INDEX_OF_IS_SOMETHING_VISIBLE, v);
-}
-
-const ComponentA: FC = () => {
-  const isSomethingVisible = useIsSomethingVisible();
-  return (
-    <div>
-      {isSomethingVisible && <div>Part A related to something</div>}
-      <button onClick={() => setIsSomethingVisible(true)}>Show</button>
-      <button onClick={() => setIsSomethingVisible(false)}>Hide</button>
-      <div>Everything else in component A</div>
-    </div>
-  );
-};
-
-const ComponentB: FC = () => {
-  const isSomethingVisible = useIsSomethingVisible();
-  return (
-    <div>
-      {isSomethingVisible && <div>Part B related to something</div>}
-      <div>Everything else in component B</div>
-    </div>
-  );
-};
-```
-
-The plain state `isSomethingVisible` is managed by the pair of functions `useIsSomethingVisible` and `setIsSomethingVisible` which read and write the value. The default value is specified by the second param of `useSpreadIn`. The benifit is, it's straightforward and avoids boilerplates.
-
 ### Spread a result of data fetching
 
-Supposing 2 components (`ComponentA` and `ComponentB`) are sharing a result of data fetching which gets rendered in both of them and gets refetched in one of them:
+Supposing the `ComponentA` prepares params and fetches data with those params using the `useQuery` from React Query (or using the `useSWR` from SWR), and now we want to get the data fetching result visited in the `ComponentB`, the implementation with Spreado looks like:
 
 ```tsx
 import {
@@ -109,13 +67,13 @@ const ComponentB: FC = () => {
 };
 ```
 
-The snake-case named functions are placeholders. The result of data fetching gets shared by `useSomeDataQuerySpreadOut` and gets re-visited by `useSomeDataQuerySpreadIn`. The fallback value of the shared result is specified by the second param of `useSpreadIn` in case that there is not yet any result fetched. Notice that both returns contain the binded helpers for the fetched data, which can help operate the fetched data like refetching later as needed. In terms of state managing, the benifit is, again, it's straightforward and avoids boilerplates. In terms of data fetching, the benifit is, it avoids quite amount of work on preparing a same set of fetching params in different components, especially when the params are coupled more or less with presentational logics in any of the components.
+The snake-case named functions are placeholders. The data fetching result gets spread by `useSomeDataQuerySpreadOut` in `ComponentA` and gets visited by `useSomeDataQuerySpreadIn` in `ComponentB`. The second param of `useSpreadIn` is a fallback value in case the spread value is not available. The data fetching result stays timely-updated in `ComponentB` even if the data fetching helper `refetch` is invoked in `ComponentA`.
 
 ### Initialization
 
-Spreado assumes a pair of a state managing lib and a data fetching lib has been adopted by your modern React app. It aims to integrate with them well but won't re-invent wheels itself. Most well-known libs of the categories (e.g. [Redux](https://github.com/reduxjs/redux), [MobX](https://github.com/mobxjs/mobx), [React Query](https://github.com/tannerlinsley/react-query), [SWR](https://github.com/vercel/swr)) have been supported by spreado. You may pick up your preferred pair, then setup spreado as follows:
+Spreado expects a pair of a state managing lib and a data fetching lib has been adopted by your React app. It aims to integrate with them well but won't re-invent wheels itself. Most well-known libs of the categories (e.g. [Redux](https://github.com/reduxjs/redux), [MobX](https://github.com/mobxjs/mobx), [React Query](https://github.com/tannerlinsley/react-query), [SWR](https://github.com/vercel/swr)) have been supported by spreado. You may pick up your preferred pair, then setup spreado as follows:
 
-#### With Redux and React Query
+#### For Redux and React Query
 
 ```tsx
 // Requires peer dependencies installed: `react`, `redux`, `react-redux`, `react-query`.
@@ -146,7 +104,7 @@ const App: FC = () => {
 };
 ```
 
-#### With Redux Toolkit and React Query
+#### For Redux Toolkit and React Query
 
 ```tsx
 // Requires peer dependencies installed: `react`, `@reduxjs/toolkit`, `react-redux`, `react-query`.
@@ -180,7 +138,7 @@ const App: FC = () => {
 };
 ```
 
-#### With Redux and SWR
+#### For Redux and SWR
 
 ```tsx
 // Requires peer dependencies installed: `react`, `redux`, `react-redux`, `swr`.
@@ -204,7 +162,7 @@ const App: FC = () => {
 };
 ```
 
-#### With Redux Toolkit and SWR
+#### For Redux Toolkit and SWR
 
 ```tsx
 // Requires peer dependencies installed: `react`, `@reduxjs/toolkit`, `react-redux`, `swr`.
@@ -231,7 +189,7 @@ const App: FC = () => {
 };
 ```
 
-#### With MobX and React Query
+#### For MobX and React Query
 
 ```tsx
 // Requires peer dependencies installed: `react`, `mobx`, `react-query`.
@@ -254,7 +212,7 @@ const App: FC = () => {
 };
 ```
 
-#### With MobX and SWR
+#### For MobX and SWR
 
 ```tsx
 // Requires peer dependencies installed: `react`, `mobx`, `swr`.
@@ -275,6 +233,50 @@ const App: FC = () => {
 ```
 
 Notice that constructors `SpreadoSetupForMobX...` optionally accept a param `store` that can get instantiated by `new SpreadoMobXStore()`. If the `store` is give, constructors `SpreadoSetupForMobX...` will use it. Otherwise, they will create one internally.
+
+### Maintain simple global states
+
+Another potential usage of Spreado is to maintain simple global states. State managing libs are definitely able to maintain global state because that's just what they are created for. But when it comes to simple global states (like a boolean state), with Spreado we can maintain them more easily. Meanwhile, although Spreado builds its APIs based on the state managing lib in the React app, it only regards it as a peer dependency. That is, when it comes to complex global states (like some very complex array), the peer-dependency state managing lib is still available for us.
+
+Assuming there is a boolean global state that 2 components share, the implementation with Spreado looks like:
+
+```tsx
+import {setSpreadOut, useSpreadIn} from 'spreado';
+
+const INDEX_OF_IS_SOMETHING_VISIBLE = 'INDEX_OF_IS_SOMETHING_VISIBLE';
+
+function useIsSomethingVisible() {
+  return useSpreadIn<boolean>(INDEX_OF_IS_SOMETHING_VISIBLE, false);
+}
+
+function setIsSomethingVisible(v: boolean) {
+  return setSpreadOut(INDEX_OF_IS_SOMETHING_VISIBLE, v);
+}
+
+const ComponentA: FC = () => {
+  const isSomethingVisible = useIsSomethingVisible();
+  return (
+    <div>
+      {isSomethingVisible && <div>Part A related to something</div>}
+      <button onClick={() => setIsSomethingVisible(true)}>Show</button>
+      <button onClick={() => setIsSomethingVisible(false)}>Hide</button>
+      <div>Everything else in component A</div>
+    </div>
+  );
+};
+
+const ComponentB: FC = () => {
+  const isSomethingVisible = useIsSomethingVisible();
+  return (
+    <div>
+      {isSomethingVisible && <div>Part B related to something</div>}
+      <div>Everything else in component B</div>
+    </div>
+  );
+};
+```
+
+The boolean global state `isSomethingVisible` is managed by the pair of functions `useIsSomethingVisible` and `setIsSomethingVisible` which read and write the value. The initial value of the state is specified by the second param of `useSpreadIn`.
 
 ### Sever side rendering (SSR)
 
