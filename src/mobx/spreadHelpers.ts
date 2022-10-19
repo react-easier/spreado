@@ -5,7 +5,7 @@ import {useEffect, useMemo, useRef, useState} from 'react';
 import {generateSpreadKey} from '../core';
 import {SpreadoMobXStore} from './SpreadoMobXStore';
 
-export function useSpreadOut<T>(
+export function _useSpreadOut<T>(
   store: SpreadoMobXStore,
   counter: Record<string, number>,
   index: unknown,
@@ -47,7 +47,7 @@ export function useSpreadOut<T>(
   return foundValue ?? value;
 }
 
-export function useSpreadIn<T>(
+export function _useSpreadIn<T>(
   store: SpreadoMobXStore,
   index: unknown,
   fallback?: Partial<T>
@@ -78,7 +78,7 @@ export function useSpreadIn<T>(
   return foundValue;
 }
 
-export function setSpreadOut<T>(
+export function _setSpreadOut<T>(
   store: SpreadoMobXStore,
   index: unknown,
   value: T | ((value?: T) => T)
@@ -97,7 +97,7 @@ export function setSpreadOut<T>(
   return value;
 }
 
-export function getSpreadIn<T>(
+export function _getSpreadIn<T>(
   store: SpreadoMobXStore,
   index: unknown,
   fallback?: Partial<T>

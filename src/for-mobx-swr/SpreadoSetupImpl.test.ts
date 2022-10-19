@@ -2,7 +2,7 @@ import {renderHook} from '@testing-library/react-hooks';
 import {mocked} from 'jest-mock';
 import {get, uniqueId} from 'lodash';
 
-import {getSpreadIn, setSpreadOut, SpreadoMobXStore, useSpreadIn, useSpreadOut} from '../mobx';
+import {_getSpreadIn, _setSpreadOut, _useSpreadIn, _useSpreadOut, SpreadoMobXStore} from '../mobx';
 import {SpreadoSetupForMobXSwr} from './SpreadoSetupImpl';
 
 const store: SpreadoMobXStore = {} as never;
@@ -35,7 +35,7 @@ describe('SpreadoSetupForMobXSwr', () => {
       const index = uniqueId();
       const value = uniqueId();
       renderHook(() => setup.useSpreadOut(index, value));
-      expect(useSpreadOut).toBeCalledWith(store, get(setup, 'useSpreadOutCounter'), index, value);
+      expect(_useSpreadOut).toBeCalledWith(store, get(setup, 'useSpreadOutCounter'), index, value);
     });
   });
 
@@ -45,7 +45,7 @@ describe('SpreadoSetupForMobXSwr', () => {
       const index = uniqueId();
       const fallback = uniqueId();
       renderHook(() => setup.useSpreadIn(index, fallback));
-      expect(useSpreadIn).toBeCalledWith(store, index, fallback);
+      expect(_useSpreadIn).toBeCalledWith(store, index, fallback);
     });
   });
 
@@ -55,7 +55,7 @@ describe('SpreadoSetupForMobXSwr', () => {
       const index = uniqueId();
       const value = uniqueId();
       setup.setSpreadOut(index, value);
-      expect(setSpreadOut).toBeCalledWith(store, index, value);
+      expect(_setSpreadOut).toBeCalledWith(store, index, value);
     });
   });
 
@@ -65,7 +65,7 @@ describe('SpreadoSetupForMobXSwr', () => {
       const index = uniqueId();
       const fallback = uniqueId();
       setup.getSpreadIn(index, fallback);
-      expect(getSpreadIn).toBeCalledWith(store, index, fallback);
+      expect(_getSpreadIn).toBeCalledWith(store, index, fallback);
     });
   });
 });
