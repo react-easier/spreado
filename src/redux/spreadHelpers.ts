@@ -7,7 +7,7 @@ import {generateSpreadKey} from '../core';
 import {findValueInRootState} from './findValue';
 import {resetSpreadoReduxState, setSpreadoReduxState} from './module';
 
-export function useSpreadOut<T>(counter: Record<string, number>, index: unknown, value: T): T {
+export function _useSpreadOut<T>(counter: Record<string, number>, index: unknown, value: T): T {
   const dispatch = useDispatch();
   const key = useMemo(() => generateSpreadKey(index), [index]);
   const refTrackedValue = useRef<T | symbol>(Symbol());
@@ -33,12 +33,12 @@ export function useSpreadOut<T>(counter: Record<string, number>, index: unknown,
   return useSelector((rootState) => findValueInRootState<T>(rootState, key)) ?? value;
 }
 
-export function useSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined {
+export function _useSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined {
   const key = useMemo(() => generateSpreadKey(index), [index]);
   return useSelector((rootState) => findValueInRootState(rootState, key, fallback));
 }
 
-export function setSpreadOut<T>(store: Store, index: unknown, value: T | ((value?: T) => T)): T {
+export function _setSpreadOut<T>(store: Store, index: unknown, value: T | ((value?: T) => T)): T {
   const key = generateSpreadKey(index);
 
   if (typeof value === 'function') {
@@ -54,7 +54,7 @@ export function setSpreadOut<T>(store: Store, index: unknown, value: T | ((value
   return value;
 }
 
-export function getSpreadIn<T>(
+export function _getSpreadIn<T>(
   store: Store,
   index: unknown,
   fallback?: Partial<T>

@@ -1,7 +1,7 @@
 import {Store} from 'redux';
 
 import {SpreadoSetupBase, SpreadoSetupOptions} from '../core';
-import {getSpreadIn, setSpreadOut, useSpreadIn, useSpreadOut} from '../redux';
+import {_getSpreadIn, _setSpreadOut, _useSpreadIn, _useSpreadOut} from '../redux';
 
 interface Options extends SpreadoSetupOptions {
   store: Store;
@@ -18,19 +18,19 @@ export class SpreadoSetupForReduxSwr extends SpreadoSetupBase {
 
   useSpreadOut<T>(index: unknown, value: T): T {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useSpreadOut(this.useSpreadOutCounter, index, value);
+    return _useSpreadOut(this.useSpreadOutCounter, index, value);
   }
 
   useSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useSpreadIn(index, fallback);
+    return _useSpreadIn(index, fallback);
   }
 
   setSpreadOut<T>(index: unknown, value: T | ((value?: T) => T)): T {
-    return setSpreadOut(this.options.store, index, value);
+    return _setSpreadOut(this.options.store, index, value);
   }
 
   getSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined {
-    return getSpreadIn(this.options.store, index, fallback);
+    return _getSpreadIn(this.options.store, index, fallback);
   }
 }

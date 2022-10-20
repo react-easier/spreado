@@ -7,7 +7,7 @@ import {DefaultRootState, Store} from 'redux';
 import {generateSpreadKey} from '../core';
 import {findValueInRootState} from './findValue';
 import {resetSpreadoReduxState, setSpreadoReduxState} from './module';
-import {getSpreadIn, setSpreadOut, useSpreadIn, useSpreadOut} from './spreadHelpers';
+import {_getSpreadIn, _setSpreadOut, _useSpreadIn, _useSpreadOut} from './spreadHelpers';
 
 const rootState: DefaultRootState = {};
 const store: Store = {getState: () => rootState, dispatch: jest.fn()} as never;
@@ -24,7 +24,7 @@ beforeEach(() => {
   mocked(findValueInRootState).mockReturnValue(undefined);
 });
 
-describe('useSpreadOut', () => {
+describe('_useSpreadOut', () => {
   test('returns proper value and updates redux state', async () => {
     const counter: Record<string, number> = {};
     const index = uniqueId();
@@ -32,9 +32,12 @@ describe('useSpreadOut', () => {
 
     // returns input value immediately after initial call, before redux state updated
     const inputValue1 = uniqueId();
-    const {result, rerender, unmount} = renderHook((value) => useSpreadOut(counter, index, value), {
-      initialProps: inputValue1,
-    });
+    const {result, rerender, unmount} = renderHook(
+      (value) => _useSpreadOut(counter, index, value),
+      {
+        initialProps: inputValue1,
+      }
+    );
     expect(setSpreadoReduxState).toBeCalledWith(key, inputValue1);
     expect(findValueInRootState).toHaveBeenNthCalledWith(1, rootState, key);
     expect(result.current).toEqual(inputValue1);
@@ -82,11 +85,11 @@ describe('useSpreadOut', () => {
     const key = generateSpreadKey(index);
 
     const value1 = uniqueId();
-    const {unmount: unmount1} = renderHook(() => useSpreadOut(counter, index, value1));
+    const {unmount: unmount1} = renderHook(() => _useSpreadOut(counter, index, value1));
     expect(counter[key]).toEqual(1);
 
     const value2 = uniqueId();
-    const {unmount: unmount2} = renderHook(() => useSpreadOut(counter, index, value2));
+    const {unmount: unmount2} = renderHook(() => _useSpreadOut(counter, index, value2));
     expect(counter[key]).toEqual(2);
 
     unmount1();
@@ -96,25 +99,25 @@ describe('useSpreadOut', () => {
   });
 });
 
-describe('useSpreadIn', () => {
+describe('_useSpreadIn', () => {
   test('returns value in redux state', () => {
     const index = uniqueId();
     const key = generateSpreadKey(index);
     const fallback = uniqueId();
     const value = uniqueId();
     mocked(findValueInRootState).mockReturnValue(value);
-    const {result} = renderHook(() => useSpreadIn(index, fallback));
+    const {result} = renderHook(() => _useSpreadIn(index, fallback));
     expect(findValueInRootState).toBeCalledWith(rootState, key, fallback);
     expect(result.current).toEqual(value);
   });
 });
 
-describe('setSpreadOut', () => {
+describe('_setSpreadOut', () => {
   test('updates redux state directly if plain value given', () => {
     const index = uniqueId();
     const key = generateSpreadKey(index);
     const value = uniqueId();
-    const ret = setSpreadOut(store, index, value);
+    const ret = _setSpreadOut(store, index, value);
     expect(ret).toBe(value);
     expect(setSpreadoReduxState).toBeCalledWith(key, value);
   });
@@ -126,21 +129,21 @@ describe('setSpreadOut', () => {
     const callback = jest.fn(() => newValue);
     const oldValue = uniqueId();
     mocked(findValueInRootState).mockReturnValue(oldValue);
-    const ret = setSpreadOut(store, index, callback);
+    const ret = _setSpreadOut(store, index, callback);
     expect(callback).toBeCalledWith(oldValue);
     expect(ret).toBe(newValue);
     expect(setSpreadoReduxState).toBeCalledWith(key, newValue);
   });
 });
 
-describe('getSpreadIn', () => {
+describe('_getSpreadIn', () => {
   test('returns value in redux state', () => {
     const index = uniqueId();
     const key = generateSpreadKey(index);
     const fallback = uniqueId();
     const value = uniqueId();
     mocked(findValueInRootState).mockReturnValue(value);
-    const ret = getSpreadIn(store, index, fallback);
+    const ret = _getSpreadIn(store, index, fallback);
     expect(findValueInRootState).toBeCalledWith(rootState, key, fallback);
     expect(ret).toEqual(value);
   });
