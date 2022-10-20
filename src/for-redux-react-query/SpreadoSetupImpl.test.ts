@@ -6,12 +6,12 @@ import {Store} from 'redux';
 
 import {generateSpreadKey} from '../core';
 import {
+  _getSpreadIn,
+  _setSpreadOut,
+  _useSpreadIn,
+  _useSpreadOut,
   bulkSetSpreadoReduxState,
-  getSpreadIn,
-  setSpreadOut,
   SpreadoReduxState,
-  useSpreadIn,
-  useSpreadOut,
 } from '../redux';
 import {SpreadoSetupForReduxReactQuery} from './SpreadoSetupImpl';
 
@@ -43,7 +43,7 @@ describe('SpreadoSetupForReduxReactQuery', () => {
       const index = uniqueId();
       const value = uniqueId();
       renderHook(() => setup.useSpreadOut(index, value));
-      expect(useSpreadOut).toBeCalledWith(get(setup, 'useSpreadOutCounter'), index, value);
+      expect(_useSpreadOut).toBeCalledWith(get(setup, 'useSpreadOutCounter'), index, value);
     });
   });
 
@@ -53,7 +53,7 @@ describe('SpreadoSetupForReduxReactQuery', () => {
       const index = uniqueId();
       const fallback = uniqueId();
       renderHook(() => setup.useSpreadIn(index, fallback));
-      expect(useSpreadIn).toBeCalledWith(index, fallback);
+      expect(_useSpreadIn).toBeCalledWith(index, fallback);
     });
   });
 
@@ -63,7 +63,7 @@ describe('SpreadoSetupForReduxReactQuery', () => {
       const index = uniqueId();
       const value = uniqueId();
       setup.setSpreadOut(index, value);
-      expect(setSpreadOut).toBeCalledWith(store, index, value);
+      expect(_setSpreadOut).toBeCalledWith(store, index, value);
     });
   });
 
@@ -73,7 +73,7 @@ describe('SpreadoSetupForReduxReactQuery', () => {
       const index = uniqueId();
       const fallback = uniqueId();
       setup.getSpreadIn(index, fallback);
-      expect(getSpreadIn).toBeCalledWith(store, index, fallback);
+      expect(_getSpreadIn).toBeCalledWith(store, index, fallback);
     });
   });
 
