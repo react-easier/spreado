@@ -114,7 +114,7 @@ describe('_setSpreadOut', () => {
     const oldValue = uniqueId();
     store.setState(key, oldValue);
     const ret = _setSpreadOut(store, index, callback);
-    expect(callback).toBeCalledWith(oldValue);
+    expect(callback).toHaveBeenCalledWith(oldValue);
     expect(ret).toBe(newValue);
     expect(store.state[key]).toEqual(newValue);
   });

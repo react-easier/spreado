@@ -43,7 +43,7 @@ describe('SpreadoSetupForReduxReactQuery', () => {
       const index = uniqueId();
       const value = uniqueId();
       renderHook(() => setup.useSpreadOut(index, value));
-      expect(_useSpreadOut).toBeCalledWith(get(setup, 'useSpreadOutCounter'), index, value);
+      expect(_useSpreadOut).toHaveBeenCalledWith(get(setup, 'useSpreadOutCounter'), index, value);
     });
   });
 
@@ -53,7 +53,7 @@ describe('SpreadoSetupForReduxReactQuery', () => {
       const index = uniqueId();
       const fallback = uniqueId();
       renderHook(() => setup.useSpreadIn(index, fallback));
-      expect(_useSpreadIn).toBeCalledWith(index, fallback);
+      expect(_useSpreadIn).toHaveBeenCalledWith(index, fallback);
     });
   });
 
@@ -63,7 +63,7 @@ describe('SpreadoSetupForReduxReactQuery', () => {
       const index = uniqueId();
       const value = uniqueId();
       setup.setSpreadOut(index, value);
-      expect(_setSpreadOut).toBeCalledWith(store, index, value);
+      expect(_setSpreadOut).toHaveBeenCalledWith(store, index, value);
     });
   });
 
@@ -73,7 +73,7 @@ describe('SpreadoSetupForReduxReactQuery', () => {
       const index = uniqueId();
       const fallback = uniqueId();
       setup.getSpreadIn(index, fallback);
-      expect(_getSpreadIn).toBeCalledWith(store, index, fallback);
+      expect(_getSpreadIn).toHaveBeenCalledWith(store, index, fallback);
     });
   });
 
@@ -84,7 +84,7 @@ describe('SpreadoSetupForReduxReactQuery', () => {
         queryClient,
         enableAutoSpread: true,
       });
-      expect(queryCache.subscribe).toBeCalledWith(expect.any(Function));
+      expect(queryCache.subscribe).toHaveBeenCalledWith(expect.any(Function));
     });
 
     test('bulk updates redux state on query cache change', () => {
@@ -114,7 +114,7 @@ describe('SpreadoSetupForReduxReactQuery', () => {
         kvMap[generateSpreadKey(k)] = queryKeyStateMap[k];
       }
       triggerQueryCacheChange();
-      expect(bulkSetSpreadoReduxState).toBeCalledWith(kvMap);
+      expect(bulkSetSpreadoReduxState).toHaveBeenCalledWith(kvMap);
     });
   });
 });
