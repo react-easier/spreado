@@ -2,18 +2,18 @@ import {isEqual} from 'lodash';
 import {reaction} from 'mobx';
 import {useEffect, useMemo, useRef, useState} from 'react';
 
-import {generateSpreadKey} from '../core';
+import {evaluateFallback, generateSpreadKey, TryPartial} from '../core';
 import {SpreadoMobXStore} from './SpreadoMobXStore';
 
-export function _useSpreadOut<T>(
+export function _useSpreadOut<V>(
   store: SpreadoMobXStore,
   counter: Record<string, number>,
   index: unknown,
-  value: T
-): T {
+  value: V
+): V {
   const key = useMemo(() => generateSpreadKey(index), [index]);
 
-  const [foundValue, setFoundValue] = useState(() => store.findValue<T>(key));
+  const [foundValue, setFoundValue] = useState(() => store.findValue<V>(key));
   const refFoundValue = useRef(foundValue);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export function _useSpreadOut<T>(
 
   useEffect(() => {
     return reaction(
-      () => store.findValue<T>(key),
+      () => store.findValue<V>(key),
       (foundValue) => {
         if (!isEqual(foundValue, refFoundValue.current)) {
           setFoundValue(foundValue);
@@ -47,24 +47,26 @@ export function _useSpreadOut<T>(
   return foundValue ?? value;
 }
 
-export function _useSpreadIn<T>(
+export function _useSpreadIn<V>(
   store: SpreadoMobXStore,
   index: unknown,
-  fallback?: Partial<T>
-): T | Partial<T> | undefined {
+  fallback?: TryPartial<V>
+): V | TryPartial<V> | undefined {
   const key = useMemo(() => generateSpreadKey(index), [index]);
 
-  const [foundValue, setFoundValue] = useState(() => store.findValue<T>(key, fallback));
-  const refFallback = useRef(fallback);
+  const [foundValue, setFoundValue] = useState(() => store.findValue<V>(key, fallback));
+  const finalFallback = useMemo(() => evaluateFallback(index, fallback), [index, fallback]);
+
+  const refFinalFallback = useRef(finalFallback);
   const refFoundValue = useRef(foundValue);
 
   useEffect(() => {
-    refFallback.current = fallback;
-  }, [fallback]);
+    refFinalFallback.current = finalFallback;
+  }, [finalFallback]);
 
   useEffect(() => {
     return reaction(
-      () => store.findValue<T>(key, refFallback.current),
+      () => store.findValue<V>(key, refFinalFallback.current),
       (foundValue) => {
         if (!isEqual(foundValue, refFoundValue.current)) {
           setFoundValue(foundValue);
@@ -78,16 +80,16 @@ export function _useSpreadIn<T>(
   return foundValue;
 }
 
-export function _setSpreadOut<T>(
+export function _setSpreadOut<V>(
   store: SpreadoMobXStore,
   index: unknown,
-  value: T | ((value?: T) => T)
-): T {
+  value: V | ((value?: V | TryPartial<V>) => V)
+): V {
   const key = generateSpreadKey(index);
 
   if (typeof value === 'function') {
-    const callback = value as (value?: T) => T;
-    const oldValue = store.findValue<T>(key);
+    const callback = value as (value?: V | TryPartial<V>) => V;
+    const oldValue = store.findValue<V>(key, evaluateFallback<V>(index));
     const newValue = callback(oldValue);
     store.setState(key, newValue);
     return newValue;
@@ -97,11 +99,12 @@ export function _setSpreadOut<T>(
   return value;
 }
 
-export function _getSpreadIn<T>(
+export function _getSpreadIn<V>(
   store: SpreadoMobXStore,
   index: unknown,
-  fallback?: Partial<T>
-): T | Partial<T> | undefined {
+  fallback?: TryPartial<V>
+): V | TryPartial<V> | undefined {
   const key = generateSpreadKey(index);
-  return store.findValue(key, fallback);
+  const finalFallback = evaluateFallback(index, fallback);
+  return store.findValue(key, finalFallback);
 }

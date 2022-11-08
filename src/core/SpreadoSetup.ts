@@ -1,20 +1,39 @@
 import {setSpreadoGlobalState} from '../global';
+import {SpreadIndex, SpreadIndexWithFallback} from './SpreadIndex';
+import {TryMatch, TryPartial} from './types';
 
 export interface SpreadoSetupOptions {}
 
 export interface SpreadoSetup {
-  useSpreadOut<T>(index: unknown, value: T): T;
+  useSpreadOut<V, I = unknown>(index: TryMatch<I, SpreadIndex<V>>, value: V): V;
 
-  useSpreadIn<T>(index: unknown): T | undefined;
-  useSpreadIn<T>(index: unknown, fallback: Partial<T>): T | Partial<T>;
-  useSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined;
+  useSpreadIn<V>(index: SpreadIndexWithFallback<V>): V | TryPartial<V>;
+  useSpreadIn<V, I = unknown>(index: TryMatch<I, SpreadIndex<V>>): V | undefined;
+  useSpreadIn<V, I = unknown>(
+    index: TryMatch<I, SpreadIndex<V>>,
+    fallback: TryPartial<V>
+  ): V | TryPartial<V>;
+  useSpreadIn<V>(index: SpreadIndexWithFallback<V>, fallback?: TryPartial<V>): V | TryPartial<V>;
+  useSpreadIn<V, I = unknown>(
+    index: TryMatch<I, SpreadIndex<V>>,
+    fallback?: TryPartial<V>
+  ): V | TryPartial<V> | undefined;
 
-  setSpreadOut<T>(index: unknown, value: T): T;
-  setSpreadOut<T>(index: unknown, callback: (value?: T) => T): T;
+  setSpreadOut<V, I = unknown>(index: TryMatch<I, SpreadIndex<V>>, value: V): V;
+  setSpreadOut<V>(index: SpreadIndexWithFallback<V>, callback: (value: V | TryPartial<V>) => V): V;
+  setSpreadOut<V, I = unknown>(index: TryMatch<I, SpreadIndex<V>>, callback: (value?: V) => V): V;
 
-  getSpreadIn<T>(index: unknown): T | undefined;
-  getSpreadIn<T>(index: unknown, fallback: Partial<T>): T | Partial<T>;
-  getSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined;
+  getSpreadIn<V>(index: SpreadIndexWithFallback<V>): V | TryPartial<V>;
+  getSpreadIn<V, I = unknown>(index: TryMatch<I, SpreadIndex<V>>): V | undefined;
+  getSpreadIn<V, I = unknown>(
+    index: TryMatch<I, SpreadIndex<V>>,
+    fallback: TryPartial<V>
+  ): V | TryPartial<V>;
+  getSpreadIn<V>(index: SpreadIndexWithFallback<V>, fallback?: TryPartial<V>): V | TryPartial<V>;
+  getSpreadIn<V, I>(
+    index: TryMatch<I, SpreadIndex<V>>,
+    fallback?: TryPartial<V>
+  ): V | TryPartial<V> | undefined;
 }
 
 export abstract class SpreadoSetupBase implements SpreadoSetup {
@@ -24,9 +43,8 @@ export abstract class SpreadoSetupBase implements SpreadoSetup {
     setSpreadoGlobalState({spreadoSetup: this});
   }
 
-  abstract useSpreadOut<T>(index: unknown, value: T): T;
-  abstract useSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined;
-
-  abstract setSpreadOut<T>(index: unknown, value: T | ((value?: T) => T)): T;
-  abstract getSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined;
+  abstract useSpreadOut: SpreadoSetup['useSpreadOut'];
+  abstract useSpreadIn: SpreadoSetup['useSpreadIn'];
+  abstract setSpreadOut: SpreadoSetup['setSpreadOut'];
+  abstract getSpreadIn: SpreadoSetup['getSpreadIn'];
 }

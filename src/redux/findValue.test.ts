@@ -1,5 +1,6 @@
 import {uniqueId} from 'lodash';
 
+import {TryPartial} from '../core';
 import {findValueInRootState} from './findValue';
 import {SPREADO_REDUX_STATE_INDEX} from './module';
 
@@ -31,7 +32,7 @@ describe('findValueInRootState', () => {
 
   test('returns fallback if not found but fallback provided', () => {
     const key = uniqueId();
-    const fallback: Partial<MyValueType> = {x: 1};
+    const fallback: TryPartial<MyValueType> = {x: 1};
     expect(findValueInRootState<MyValueType>({}, key, fallback)).toEqual(fallback);
   });
 });

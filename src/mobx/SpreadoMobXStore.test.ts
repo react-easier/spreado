@@ -2,6 +2,7 @@ import {waitFor} from '@testing-library/react';
 import {pick, uniqueId} from 'lodash';
 import {autorun} from 'mobx';
 
+import {TryPartial} from '../core';
 import {SpreadoMobXStore} from './SpreadoMobXStore';
 import {SpreadoMobXState} from './types';
 
@@ -35,7 +36,7 @@ describe('SpreadoMobXStore', () => {
 
     test('returns fallback if not found but fallback provided', () => {
       const key = uniqueId();
-      const fallback: Partial<MyValueType> = {x: 1};
+      const fallback: TryPartial<MyValueType> = {x: 1};
       expect(store.findValue<MyValueType>(key, fallback)).toEqual(fallback);
     });
   });

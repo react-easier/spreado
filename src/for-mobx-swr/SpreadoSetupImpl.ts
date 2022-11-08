@@ -1,4 +1,4 @@
-import {SpreadoSetupBase, SpreadoSetupOptions} from '../core';
+import {SpreadoSetupBase, SpreadoSetupOptions, TryPartial} from '../core';
 import {_getSpreadIn, _setSpreadOut, _useSpreadIn, _useSpreadOut, SpreadoMobXStore} from '../mobx';
 
 interface Options extends SpreadoSetupOptions {
@@ -20,21 +20,21 @@ export class SpreadoSetupForMobXSwr extends SpreadoSetupBase {
     };
   }
 
-  useSpreadOut<T>(index: unknown, value: T): T {
+  useSpreadOut = <V>(index: unknown, value: V): V => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return _useSpreadOut(this.options.store, this.useSpreadOutCounter, index, value);
-  }
+  };
 
-  useSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined {
+  useSpreadIn = <V>(index: unknown, fallback?: TryPartial<V>): V | TryPartial<V> | undefined => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return _useSpreadIn(this.options.store, index, fallback);
-  }
+  };
 
-  setSpreadOut<T>(index: unknown, value: T | ((value?: T) => T)): T {
+  setSpreadOut = <V>(index: unknown, value: V | ((value?: V | TryPartial<V>) => V)): V => {
     return _setSpreadOut(this.options.store, index, value);
-  }
+  };
 
-  getSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined {
+  getSpreadIn = <V>(index: unknown, fallback?: TryPartial<V>): V | TryPartial<V> | undefined => {
     return _getSpreadIn(this.options.store, index, fallback);
-  }
+  };
 }
