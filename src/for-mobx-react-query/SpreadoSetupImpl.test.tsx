@@ -55,7 +55,12 @@ describe('SpreadoSetupForMobXReactQuery', () => {
       const index = uniqueId();
       const value = uniqueId();
       renderHook(() => setup.useSpreadOut(index, value));
-      expect(_useSpreadOut).toBeCalledWith(store, get(setup, 'useSpreadOutCounter'), index, value);
+      expect(_useSpreadOut).toHaveBeenCalledWith(
+        store,
+        get(setup, 'useSpreadOutCounter'),
+        index,
+        value
+      );
     });
   });
 
@@ -65,7 +70,7 @@ describe('SpreadoSetupForMobXReactQuery', () => {
       const index = uniqueId();
       const fallback = uniqueId();
       renderHook(() => setup.useSpreadIn(index, fallback));
-      expect(_useSpreadIn).toBeCalledWith(store, index, fallback);
+      expect(_useSpreadIn).toHaveBeenCalledWith(store, index, fallback);
     });
   });
 
@@ -75,7 +80,7 @@ describe('SpreadoSetupForMobXReactQuery', () => {
       const index = uniqueId();
       const value = uniqueId();
       setup.setSpreadOut(index, value);
-      expect(_setSpreadOut).toBeCalledWith(store, index, value);
+      expect(_setSpreadOut).toHaveBeenCalledWith(store, index, value);
     });
   });
 
@@ -85,7 +90,7 @@ describe('SpreadoSetupForMobXReactQuery', () => {
       const index = uniqueId();
       const fallback = uniqueId();
       setup.getSpreadIn(index, fallback);
-      expect(_getSpreadIn).toBeCalledWith(store, index, fallback);
+      expect(_getSpreadIn).toHaveBeenCalledWith(store, index, fallback);
     });
   });
 
@@ -96,7 +101,7 @@ describe('SpreadoSetupForMobXReactQuery', () => {
         queryClient,
         enableAutoSpread: true,
       });
-      expect(queryCache.subscribe).toBeCalledWith(expect.any(Function));
+      expect(queryCache.subscribe).toHaveBeenCalledWith(expect.any(Function));
     });
 
     test('bulk updates state on query cache change', () => {
@@ -130,7 +135,7 @@ describe('SpreadoSetupForMobXReactQuery', () => {
       }
       triggerQueryCacheChange();
 
-      expect(store.bulkSetState).toBeCalledWith(kvMap);
+      expect(store.bulkSetState).toHaveBeenCalledWith(kvMap);
     });
   });
 });

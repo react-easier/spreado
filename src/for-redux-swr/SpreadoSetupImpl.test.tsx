@@ -19,7 +19,7 @@ describe('SpreadoSetupForReduxSwr', () => {
       const index = uniqueId();
       const value = uniqueId();
       renderHook(() => setup.setSpreadOut(index, value));
-      expect(_setSpreadOut).toBeCalledWith(store, index, value);
+      expect(_setSpreadOut).toHaveBeenCalledWith(store, index, value);
     });
   });
 
@@ -29,7 +29,7 @@ describe('SpreadoSetupForReduxSwr', () => {
       const index = uniqueId();
       const value = uniqueId();
       renderHook(() => setup.useSpreadOut(index, value));
-      expect(_useSpreadOut).toBeCalledWith({}, index, value);
+      expect(_useSpreadOut).toHaveBeenCalledWith({}, index, value);
     });
   });
 
@@ -39,7 +39,7 @@ describe('SpreadoSetupForReduxSwr', () => {
       const index = uniqueId();
       const value = uniqueId();
       renderHook(() => setup.getSpreadIn(index, value));
-      expect(_getSpreadIn).toBeCalledWith(store, index, value);
+      expect(_getSpreadIn).toHaveBeenCalledWith(store, index, value);
     });
   });
 
@@ -49,7 +49,7 @@ describe('SpreadoSetupForReduxSwr', () => {
       const index = uniqueId();
       const value = uniqueId();
       renderHook(() => setup.useSpreadIn(index, value));
-      expect(_useSpreadIn).toBeCalledWith(index, value);
+      expect(_useSpreadIn).toHaveBeenCalledWith(index, value);
     });
   });
 });

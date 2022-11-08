@@ -38,13 +38,13 @@ describe('_useSpreadOut', () => {
         initialProps: inputValue1,
       }
     );
-    expect(setSpreadoReduxState).toBeCalledWith(key, inputValue1);
+    expect(setSpreadoReduxState).toHaveBeenCalledWith(key, inputValue1);
     expect(findValueInRootState).toHaveBeenNthCalledWith(1, rootState, key);
     expect(result.current).toEqual(inputValue1);
 
     // returns input value on rerender after initial call, before redux state updated
     rerender();
-    expect(findValueInRootState).toBeCalledWith(rootState, key);
+    expect(findValueInRootState).toHaveBeenCalledWith(rootState, key);
     expect(findValueInRootState).toHaveBeenNthCalledWith(2, rootState, key);
     expect(result.current).toEqual(inputValue1);
 
@@ -58,7 +58,7 @@ describe('_useSpreadOut', () => {
     // returns value in old redux state immediately after second call, before redux state updated
     const inputValue2 = uniqueId();
     rerender(inputValue2);
-    expect(setSpreadoReduxState).toBeCalledWith(key, inputValue2);
+    expect(setSpreadoReduxState).toHaveBeenCalledWith(key, inputValue2);
     expect(findValueInRootState).toHaveBeenNthCalledWith(4, rootState, key);
     expect(result.current).toEqual(foundValue1);
 
@@ -76,7 +76,7 @@ describe('_useSpreadOut', () => {
 
     // resets redux in redux state on unmount
     unmount();
-    expect(resetSpreadoReduxState).toBeCalledWith(key);
+    expect(resetSpreadoReduxState).toHaveBeenCalledWith(key);
   });
 
   test('updates counter', () => {
@@ -107,7 +107,7 @@ describe('_useSpreadIn', () => {
     const value = uniqueId();
     mocked(findValueInRootState).mockReturnValue(value);
     const {result} = renderHook(() => _useSpreadIn(index, fallback));
-    expect(findValueInRootState).toBeCalledWith(rootState, key, fallback);
+    expect(findValueInRootState).toHaveBeenCalledWith(rootState, key, fallback);
     expect(result.current).toEqual(value);
   });
 });
@@ -119,7 +119,7 @@ describe('_setSpreadOut', () => {
     const value = uniqueId();
     const ret = _setSpreadOut(store, index, value);
     expect(ret).toBe(value);
-    expect(setSpreadoReduxState).toBeCalledWith(key, value);
+    expect(setSpreadoReduxState).toHaveBeenCalledWith(key, value);
   });
 
   test('evalutes the value to use if callable value given', () => {
@@ -130,9 +130,9 @@ describe('_setSpreadOut', () => {
     const oldValue = uniqueId();
     mocked(findValueInRootState).mockReturnValue(oldValue);
     const ret = _setSpreadOut(store, index, callback);
-    expect(callback).toBeCalledWith(oldValue);
+    expect(callback).toHaveBeenCalledWith(oldValue);
     expect(ret).toBe(newValue);
-    expect(setSpreadoReduxState).toBeCalledWith(key, newValue);
+    expect(setSpreadoReduxState).toHaveBeenCalledWith(key, newValue);
   });
 });
 
@@ -144,7 +144,7 @@ describe('_getSpreadIn', () => {
     const value = uniqueId();
     mocked(findValueInRootState).mockReturnValue(value);
     const ret = _getSpreadIn(store, index, fallback);
-    expect(findValueInRootState).toBeCalledWith(rootState, key, fallback);
+    expect(findValueInRootState).toHaveBeenCalledWith(rootState, key, fallback);
     expect(ret).toEqual(value);
   });
 });

@@ -35,7 +35,7 @@ describe('getSpreadIn', () => {
     const spreadoSetup = {getSpreadIn: spreadoSetup$getSpreadIn} as never;
     setSpreadoGlobalState({spreadoSetup});
     getSpreadIn(index);
-    expect(spreadoSetup$getSpreadIn).toBeCalledWith(index);
+    expect(spreadoSetup$getSpreadIn).toHaveBeenCalledWith(index);
   });
 
   test('throws error if not initialized', () => {
@@ -52,7 +52,7 @@ describe('setSpreadOut', () => {
     const spreadoSetup = {setSpreadOut: spreadoSetup$setSpreadOut} as never;
     setSpreadoGlobalState({spreadoSetup});
     setSpreadOut(index, value);
-    expect(spreadoSetup$setSpreadOut).toBeCalledWith(index, value);
+    expect(spreadoSetup$setSpreadOut).toHaveBeenCalledWith(index, value);
   });
 
   test('throws error if not initialized', () => {

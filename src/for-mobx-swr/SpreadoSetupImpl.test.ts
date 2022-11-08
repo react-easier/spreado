@@ -35,7 +35,12 @@ describe('SpreadoSetupForMobXSwr', () => {
       const index = uniqueId();
       const value = uniqueId();
       renderHook(() => setup.useSpreadOut(index, value));
-      expect(_useSpreadOut).toBeCalledWith(store, get(setup, 'useSpreadOutCounter'), index, value);
+      expect(_useSpreadOut).toHaveBeenCalledWith(
+        store,
+        get(setup, 'useSpreadOutCounter'),
+        index,
+        value
+      );
     });
   });
 
@@ -45,7 +50,7 @@ describe('SpreadoSetupForMobXSwr', () => {
       const index = uniqueId();
       const fallback = uniqueId();
       renderHook(() => setup.useSpreadIn(index, fallback));
-      expect(_useSpreadIn).toBeCalledWith(store, index, fallback);
+      expect(_useSpreadIn).toHaveBeenCalledWith(store, index, fallback);
     });
   });
 
@@ -55,7 +60,7 @@ describe('SpreadoSetupForMobXSwr', () => {
       const index = uniqueId();
       const value = uniqueId();
       setup.setSpreadOut(index, value);
-      expect(_setSpreadOut).toBeCalledWith(store, index, value);
+      expect(_setSpreadOut).toHaveBeenCalledWith(store, index, value);
     });
   });
 
@@ -65,7 +70,7 @@ describe('SpreadoSetupForMobXSwr', () => {
       const index = uniqueId();
       const fallback = uniqueId();
       setup.getSpreadIn(index, fallback);
-      expect(_getSpreadIn).toBeCalledWith(store, index, fallback);
+      expect(_getSpreadIn).toHaveBeenCalledWith(store, index, fallback);
     });
   });
 });

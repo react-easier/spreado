@@ -22,7 +22,7 @@ describe('useSpreadIn', () => {
     const index = uniqueId();
     const fallback = uniqueId();
     useSpreadIn(index, fallback);
-    expect(mockedSpreadSetup.useSpreadIn).toBeCalledWith(index, fallback);
+    expect(mockedSpreadSetup.useSpreadIn).toHaveBeenCalledWith(index, fallback);
   });
 });
 
@@ -31,6 +31,6 @@ describe('useSpreadOut', () => {
     const index = uniqueId();
     const value = uniqueId();
     useSpreadOut(index, value);
-    expect(mockedSpreadSetup.useSpreadOut).toBeCalledWith(index, value);
+    expect(mockedSpreadSetup.useSpreadOut).toHaveBeenCalledWith(index, value);
   });
 });
