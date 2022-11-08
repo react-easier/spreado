@@ -1,5 +1,6 @@
 import {action, makeObservable, observable} from 'mobx';
 
+import {TryPartial} from '../core';
 import {createSpreadoMobXPreloadedState} from './ssrHelpers';
 import {SpreadoMobXState} from './types';
 
@@ -16,14 +17,14 @@ export class SpreadoMobXStore {
     });
   }
 
-  findValue<T>(key: string): T | undefined;
-  findValue<T>(key: string, fallback: Partial<T>): T | Partial<T>;
-  findValue<T>(key: string, fallback?: Partial<T>): T | Partial<T> | undefined;
-  findValue<T>(key: string, fallback?: Partial<T>): T | Partial<T> | undefined {
+  findValue<V>(key: string): V | undefined;
+  findValue<V>(key: string, fallback: TryPartial<V>): V | TryPartial<V>;
+  findValue<V>(key: string, fallback?: TryPartial<V>): V | TryPartial<V> | undefined;
+  findValue<V>(key: string, fallback?: TryPartial<V>): V | TryPartial<V> | undefined {
     if (!(key in this.state)) {
       return fallback;
     }
-    return this.state[key] as T;
+    return this.state[key] as V;
   }
 
   setState(key: string, value: unknown): void {

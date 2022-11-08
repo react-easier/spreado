@@ -3,14 +3,14 @@ import {useEffect, useMemo, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Store} from 'redux';
 
-import {generateSpreadKey} from '../core';
+import {evaluateFallback, generateSpreadKey, TryPartial} from '../core';
 import {findValueInRootState} from './findValue';
 import {resetSpreadoReduxState, setSpreadoReduxState} from './module';
 
-export function _useSpreadOut<T>(counter: Record<string, number>, index: unknown, value: T): T {
+export function _useSpreadOut<V>(counter: Record<string, number>, index: unknown, value: V): V {
   const dispatch = useDispatch();
   const key = useMemo(() => generateSpreadKey(index), [index]);
-  const refTrackedValue = useRef<T | symbol>(Symbol());
+  const refTrackedValue = useRef<V | symbol>(Symbol());
 
   useEffect(() => {
     counter[key] = key in counter ? counter[key] + 1 : 1;
@@ -30,21 +30,29 @@ export function _useSpreadOut<T>(counter: Record<string, number>, index: unknown
     }
   }, [dispatch, key, value]);
 
-  return useSelector((rootState) => findValueInRootState<T>(rootState, key)) ?? value;
+  return useSelector((rootState) => findValueInRootState<V>(rootState, key)) ?? value;
 }
 
-export function _useSpreadIn<T>(index: unknown, fallback?: Partial<T>): T | Partial<T> | undefined {
+export function _useSpreadIn<V>(
+  index: unknown,
+  fallback?: TryPartial<V>
+): V | TryPartial<V> | undefined {
   const key = useMemo(() => generateSpreadKey(index), [index]);
-  return useSelector((rootState) => findValueInRootState(rootState, key, fallback));
+  const finalFallback = useMemo(() => evaluateFallback(index, fallback), [index, fallback]);
+  return useSelector((rootState) => findValueInRootState(rootState, key, finalFallback));
 }
 
-export function _setSpreadOut<T>(store: Store, index: unknown, value: T | ((value?: T) => T)): T {
+export function _setSpreadOut<V>(
+  store: Store,
+  index: unknown,
+  value: V | ((value?: V | TryPartial<V>) => V)
+): V {
   const key = generateSpreadKey(index);
 
   if (typeof value === 'function') {
-    const callback = value as (value?: T) => T;
+    const callback = value as (value?: V | TryPartial<V>) => V;
     const rootState = store.getState();
-    const oldValue = findValueInRootState<T>(rootState, key);
+    const oldValue = findValueInRootState<V>(rootState, key, evaluateFallback<V>(index));
     const newValue = callback(oldValue);
     store.dispatch(setSpreadoReduxState(key, newValue));
     return newValue;
@@ -54,12 +62,13 @@ export function _setSpreadOut<T>(store: Store, index: unknown, value: T | ((valu
   return value;
 }
 
-export function _getSpreadIn<T>(
+export function _getSpreadIn<V>(
   store: Store,
   index: unknown,
-  fallback?: Partial<T>
-): T | Partial<T> | undefined {
+  fallback?: TryPartial<V>
+): V | TryPartial<V> | undefined {
   const key = generateSpreadKey(index);
+  const finalFallback = evaluateFallback(index, fallback);
   const rootState = store.getState();
-  return findValueInRootState(rootState, key, fallback);
+  return findValueInRootState(rootState, key, finalFallback);
 }

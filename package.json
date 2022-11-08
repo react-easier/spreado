@@ -48,27 +48,31 @@
     "contributors": "all-contributors"
   },
   "dependencies": {
-    "lodash": "^4"
+    "lodash": "^4",
+    "nanoid": "^3"
   },
   "peerDependencies": {
-    "mobx": ">=6",
     "react": ">=16",
-    "react-query": ">=3",
-    "react-redux": ">=7",
     "redux": ">=4",
+    "react-redux": ">=7",
+    "mobx": ">=6",
+    "react-query": ">=3",
     "swr": ">=1"
   },
   "peerDependenciesMeta": {
-    "mobx": {
+    "react": {
       "optional": true
     },
-    "react-query": {
+    "redux": {
       "optional": true
     },
     "react-redux": {
       "optional": true
     },
-    "redux": {
+    "mobx": {
+      "optional": true
+    },
+    "react-query": {
       "optional": true
     },
     "swr": {
@@ -96,7 +100,7 @@
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^26.1.4",
+    "eslint-plugin-jest": "^27.1.4",
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.4.0",

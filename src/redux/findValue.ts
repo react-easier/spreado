@@ -1,28 +1,29 @@
 import {DefaultRootState} from 'redux';
 
+import {TryPartial} from '../core';
 import {SPREADO_REDUX_STATE_INDEX} from './module';
 
-function findValueInRootState<T>(rootState: DefaultRootState, key: string): T | undefined;
-function findValueInRootState<T>(
+function findValueInRootState<V>(rootState: DefaultRootState, key: string): V | undefined;
+function findValueInRootState<V>(
   rootState: DefaultRootState,
   key: string,
-  fallback: Partial<T>
-): T | Partial<T>;
-function findValueInRootState<T>(
+  fallback: TryPartial<V>
+): V | TryPartial<V>;
+function findValueInRootState<V>(
   rootState: DefaultRootState,
   key: string,
-  fallback?: Partial<T>
-): T | Partial<T> | undefined;
-function findValueInRootState<T>(
+  fallback?: TryPartial<V>
+): V | TryPartial<V> | undefined;
+function findValueInRootState<V>(
   rootState: DefaultRootState,
   key: string,
-  fallback?: Partial<T>
-): T | Partial<T> | undefined {
+  fallback?: TryPartial<V>
+): V | TryPartial<V> | undefined {
   const state = rootState[SPREADO_REDUX_STATE_INDEX];
   if (!state || !(key in state)) {
     return fallback;
   }
-  return state[key] as T;
+  return state[key] as V;
 }
 
 export {findValueInRootState};
