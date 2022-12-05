@@ -1,4 +1,4 @@
-name: Test
+name: Unit Test
 
 on:
   workflow_call:
@@ -23,7 +23,7 @@ jobs:
           node-version: 14
       - name: Install and build
         run: yarn
-      - name: Test with coverage enabled
+      - name: Unit test with coverage enabled
         run: yarn coverage
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
