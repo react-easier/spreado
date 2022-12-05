@@ -24,8 +24,8 @@ At spreado, [yarn 1.x](https://classic.yarnpkg.com/) is used to execute commands
 
 - `yarn build`: compiles source code and checks types.
 - `yarn watch`: does the same as `yarn build` but in watch mode.
-- `yarn test`: runs tests.
-- `yarn coverage`: runs tests with coverage enabled.
+- `yarn unittest`: runs unit tests.
+- `yarn coverage`: runs unit tests with coverage enabled.
 - `yarn clean:built`: cleans compilation outputs.
 - `yarn clean:coverage`: cleans coverage reports.
 - `yarn clean:cache`: cleans generated caches.
@@ -37,7 +37,7 @@ At spreado, [yarn 1.x](https://classic.yarnpkg.com/) is used to execute commands
 - `yarn lint:commitlint`: checks commit messages
 - `yarn lint`: checks everything
 
-Often, you may keep `yarn watch` running to do compilation and type checking continuously. And you may append a relative path to `yarn test/coverage` to specify which tests to run. Please just make best of commands above to help yourself.
+Often, you may keep `yarn watch` running to do compilation and type checking continuously. And you may append a relative path to `yarn unittest/coverage` to specify which unit tests to run. Please just make best of commands above to help yourself.
 
 ## Codebase Overview
 

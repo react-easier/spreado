@@ -11,9 +11,9 @@ jobs:
     name: Lint
     uses: ./.github/workflows/lint.yml
 
-  test:
-    name: Test
-    uses: ./.github/workflows/test.yml
+  unittest:
+    name: Unit Test
+    uses: ./.github/workflows/unittest.yml
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
@@ -25,7 +25,7 @@ jobs:
     name: Publish
     needs:
       - lint
-      - test
+      - unittest
       - e2e
     runs-on: ubuntu-20.04
     steps:

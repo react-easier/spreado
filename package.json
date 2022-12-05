@@ -29,11 +29,11 @@
     "for-*"
   ],
   "scripts": {
-    "build": "tsc --project configs/tsconfig.prod.json",
+    "build": "tsc --project additional-configs/tsconfig.prod.json",
     "watch": "yarn build --watch",
-    "test": "jest --testPathIgnorePatterns e2e --cache",
-    "coverage": "yarn test --coverage",
-    "e2e": "yarn jest --testPathIgnorePatterns src --cache",
+    "unittest": "cross-env JEST_TEST_PATH=src jest",
+    "coverage": "yarn unittest --coverage",
+    "e2e": "cross-env JEST_TEST_PATH=e2e jest",
     "clean": "concurrently \"yarn:clean:*\"",
     "clean:built": "rimraf lib",
     "clean:coverage": "rimraf coverage",
@@ -52,11 +52,11 @@
     "nanoid": "^3"
   },
   "peerDependencies": {
-    "react": ">=16",
-    "redux": ">=4",
-    "react-redux": ">=7",
     "mobx": ">=6",
+    "react": ">=16",
     "react-query": ">=3",
+    "react-redux": ">=7",
+    "redux": ">=4",
     "swr": ">=1"
   },
   "peerDependenciesMeta": {
@@ -96,6 +96,7 @@
     "@typescript-eslint/parser": "^5.20.0",
     "all-contributors-cli": "^6.20.0",
     "concurrently": "^7.1.0",
+    "cross-env": "^7.0.3",
     "delay": "^5.0.0",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",

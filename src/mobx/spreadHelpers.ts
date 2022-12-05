@@ -54,10 +54,10 @@ export function _useSpreadIn<V>(
 ): V | TryPartial<V> | undefined {
   const key = useMemo(() => generateSpreadKey(index), [index]);
 
-  const [foundValue, setFoundValue] = useState(() => store.findValue<V>(key, fallback));
   const finalFallback = useMemo(() => evaluateFallback(index, fallback), [index, fallback]);
-
   const refFinalFallback = useRef(finalFallback);
+
+  const [foundValue, setFoundValue] = useState(() => store.findValue<V>(key, finalFallback));
   const refFoundValue = useRef(foundValue);
 
   useEffect(() => {
